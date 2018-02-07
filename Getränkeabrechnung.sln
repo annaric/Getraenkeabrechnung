@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2009
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Getränkeabrechnung", "Getränkeabrechnung\Getränkeabrechnung.csproj", "{DD73DBBA-25CA-4126-A0B8-E81B75F4189E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetränkeabrechnungImport", "GetränkeabrechnungImport\GetränkeabrechnungImport.csproj", "{29AC0418-6B0A-42F7-BDCA-4DCB0D584EEE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DD73DBBA-25CA-4126-A0B8-E81B75F4189E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD73DBBA-25CA-4126-A0B8-E81B75F4189E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD73DBBA-25CA-4126-A0B8-E81B75F4189E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD73DBBA-25CA-4126-A0B8-E81B75F4189E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29AC0418-6B0A-42F7-BDCA-4DCB0D584EEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29AC0418-6B0A-42F7-BDCA-4DCB0D584EEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29AC0418-6B0A-42F7-BDCA-4DCB0D584EEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29AC0418-6B0A-42F7-BDCA-4DCB0D584EEE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3D2D482B-FB62-420E-A341-42B2ECB9BD02}
+	EndGlobalSection
+EndGlobal

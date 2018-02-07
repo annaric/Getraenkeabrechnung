@@ -1,0 +1,9 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Getränkeabrechnung.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="Datenbankpfad" Type="System.String" Scope="User">
+      <Value Profile="(Default)">D:\Project\Getränkeabrechnung\Getränkeabrechnung\RSH4.sqlite</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
