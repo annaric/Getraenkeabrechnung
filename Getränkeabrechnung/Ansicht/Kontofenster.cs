@@ -36,7 +36,6 @@ namespace Getränkeabrechnung.Ansicht
 
         public Kontofenster()
         {
-            // Nur für Designer
             InitializeComponent();
             StornoSpalte.AspectToStringConverter = (x => (Boolean)x ? "Stornieren" : null);
             KontoAuswahl.DisplayMember = "Name";

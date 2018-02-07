@@ -1,4 +1,5 @@
-﻿using Getränkeabrechnung.Modell;
+﻿using BrightIdeasSoftware;
+using Getränkeabrechnung.Modell;
 using Getränkeabrechnung.Steuerung;
 using System;
 using System.Collections.Generic;
@@ -18,8 +19,39 @@ namespace Getränkeabrechnung.Ansicht
         private Abrechnungssteuerung abrechnungssteuerung;
         private Benutzersteuerung benutzersteuerung;
 
-        private Benutzerfenster benutzerfenster;
-        private Kontofenster kontofenster;
+        private Benutzerfenster _benutzerfenster;
+        private Kontofenster _kontofenster;
+        private BenutzerListefenster _benutzerListefenster;
+
+        public Benutzerfenster Benutzerfenster
+        {
+            get
+            {
+                if (_benutzerfenster == null || _benutzerfenster.IsDisposed)
+                    _benutzerfenster = new Benutzerfenster(this);
+                return _benutzerfenster;
+            }
+        }
+
+        public Kontofenster Kontofenster
+        {
+            get
+            {
+                if (_kontofenster == null || _kontofenster.IsDisposed)
+                    _kontofenster = new Kontofenster(this);
+                return _kontofenster;
+            }
+        }
+
+        public BenutzerListefenster BenutzerListefenster
+        {
+            get
+            {
+                if (_benutzerListefenster == null || _benutzerListefenster.IsDisposed)
+                    _benutzerListefenster = new BenutzerListefenster(this);
+                return _benutzerListefenster;
+            }
+        }
 
         public Hauptfenster()
         {
@@ -31,6 +63,8 @@ namespace Getränkeabrechnung.Ansicht
             benutzersteuerung = Steuerung.Benutzersteuerung;
 
             StatusSpalte.AspectToStringConverter = Util.AbrechnungZustandZuString;
+
+            Benutzerliste.ModelFilter = new ModelFilter(x => ((Benutzer)x).Aktiv);
         }
 
         private void Hauptfenster_Load(object sender, EventArgs e)
@@ -73,15 +107,14 @@ namespace Getränkeabrechnung.Ansicht
 
         private void FülleBenutzer(Benutzer benutzer = null)
         {
-            if (benutzer == null || benutzer.Aktiv)
+            if (benutzer == null)
             {
-                Benutzerliste.SetObjects(benutzersteuerung.Benutzer.Where(b => b.Aktiv));
+                Benutzerliste.SetObjects(benutzersteuerung.Benutzer);
                 Benutzerliste.Sort(GuthabenSpalte, SortOrder.Ascending);
                 GuthabenSpalte.AutoResize(ColumnHeaderAutoResizeStyle.HeaderSize);
             }
             else
-                Benutzerliste.RemoveObject(benutzer);
-
+                Benutzerliste.UpdateObject(benutzer);
         }
 
         private void FülleAbrechnungen(Abrechnung abrechnung = null)
@@ -117,25 +150,27 @@ namespace Getränkeabrechnung.Ansicht
 
         private void Benutzerliste_ItemActivate(object sender, EventArgs e)
         {
-            if (benutzerfenster == null || benutzerfenster.IsDisposed)
-                benutzerfenster = new Benutzerfenster(this);
-            benutzerfenster.Benutzer = (Benutzer)Benutzerliste.GetModelObject(Benutzerliste.SelectedIndex);
-            benutzerfenster.Show();
-            benutzerfenster.Focus();
+            Benutzerfenster.Benutzer = (Benutzer)Benutzerliste.GetModelObject(Benutzerliste.SelectedIndex);
+            Benutzerfenster.Show();
+            Benutzerfenster.Focus();
         }
 
         private void Kontenliste_ItemActivate(object sender, EventArgs e)
         {
-            if (kontofenster == null || kontofenster.IsDisposed)
-                kontofenster = new Kontofenster(this);
-            kontofenster.Konto = (Konto)Kontenliste.GetModelObject(Kontenliste.SelectedIndex);
-            kontofenster.Show();
-            kontofenster.Focus();
+            Kontofenster.Konto = (Konto)Kontenliste.GetModelObject(Kontenliste.SelectedIndex);
+            Kontofenster.Show();
+            Kontofenster.Focus();
         }
 
         private void neuesKontoToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void BenutzerKnopf_Click(object sender, EventArgs e)
+        {
+            BenutzerListefenster.Show();
+            BenutzerListefenster.Focus();
         }
     }
 }

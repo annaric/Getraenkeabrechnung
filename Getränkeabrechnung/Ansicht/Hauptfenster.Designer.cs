@@ -34,28 +34,32 @@
             System.Windows.Forms.Label label1;
             BrightIdeasSoftware.OLVColumn KontoSpalte;
             BrightIdeasSoftware.OLVColumn KontostandSpalteKonten;
-            BrightIdeasSoftware.OLVColumn AbrechnungSpalte;
             System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+            BrightIdeasSoftware.OLVColumn AbrechnungSpalte;
+            System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
             this.Benutzerliste = new BrightIdeasSoftware.ObjectListView();
             this.GuthabenSpalte = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.Kontenliste = new BrightIdeasSoftware.ObjectListView();
+            this.neuesKontoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.Abrechnungsliste = new BrightIdeasSoftware.ObjectListView();
             this.StatusSpalte = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.neuesKontoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.BenutzerKnopf = new System.Windows.Forms.Button();
             tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             Benutzerspalte = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             label1 = new System.Windows.Forms.Label();
             KontoSpalte = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             KontostandSpalteKonten = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            AbrechnungSpalte = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            AbrechnungSpalte = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Benutzerliste)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Kontenliste)).BeginInit();
+            contextMenuStrip1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Abrechnungsliste)).BeginInit();
-            contextMenuStrip1.SuspendLayout();
+            tableLayoutPanel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -104,6 +108,7 @@
             this.Benutzerliste.UseAlternatingBackColors = true;
             this.Benutzerliste.UseCellFormatEvents = true;
             this.Benutzerliste.UseCompatibleStateImageBehavior = false;
+            this.Benutzerliste.UseFiltering = true;
             this.Benutzerliste.View = System.Windows.Forms.View.Details;
             this.Benutzerliste.FormatCell += new System.EventHandler<BrightIdeasSoftware.FormatCellEventArgs>(this.Benutzerliste_FormatCell);
             this.Benutzerliste.ItemActivate += new System.EventHandler(this.Benutzerliste_ItemActivate);
@@ -181,11 +186,26 @@
             KontostandSpalteKonten.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             KontostandSpalteKonten.Width = 100;
             // 
+            // contextMenuStrip1
+            // 
+            contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.neuesKontoToolStripMenuItem});
+            contextMenuStrip1.Name = "contextMenuStrip1";
+            contextMenuStrip1.Size = new System.Drawing.Size(143, 26);
+            // 
+            // neuesKontoToolStripMenuItem
+            // 
+            this.neuesKontoToolStripMenuItem.Name = "neuesKontoToolStripMenuItem";
+            this.neuesKontoToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.neuesKontoToolStripMenuItem.Text = "Neues Konto";
+            this.neuesKontoToolStripMenuItem.Click += new System.EventHandler(this.neuesKontoToolStripMenuItem_Click);
+            // 
             // tableLayoutPanel2
             // 
             this.tableLayoutPanel2.ColumnCount = 1;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.Controls.Add(this.Abrechnungsliste, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(tableLayoutPanel3, 0, 1);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(242, 70);
             this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
@@ -236,19 +256,32 @@
             this.StatusSpalte.Text = "Status";
             this.StatusSpalte.Width = 120;
             // 
-            // contextMenuStrip1
+            // tableLayoutPanel3
             // 
-            contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.neuesKontoToolStripMenuItem});
-            contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new System.Drawing.Size(153, 48);
+            tableLayoutPanel3.ColumnCount = 1;
+            tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            tableLayoutPanel3.Controls.Add(this.BenutzerKnopf, 0, 0);
+            tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            tableLayoutPanel3.Location = new System.Drawing.Point(0, 195);
+            tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
+            tableLayoutPanel3.Name = "tableLayoutPanel3";
+            tableLayoutPanel3.RowCount = 3;
+            tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            tableLayoutPanel3.Size = new System.Drawing.Size(242, 196);
+            tableLayoutPanel3.TabIndex = 4;
             // 
-            // neuesKontoToolStripMenuItem
+            // BenutzerKnopf
             // 
-            this.neuesKontoToolStripMenuItem.Name = "neuesKontoToolStripMenuItem";
-            this.neuesKontoToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.neuesKontoToolStripMenuItem.Text = "Neues Konto";
-            this.neuesKontoToolStripMenuItem.Click += new System.EventHandler(this.neuesKontoToolStripMenuItem_Click);
+            this.BenutzerKnopf.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.BenutzerKnopf.Location = new System.Drawing.Point(3, 3);
+            this.BenutzerKnopf.Name = "BenutzerKnopf";
+            this.BenutzerKnopf.Size = new System.Drawing.Size(236, 34);
+            this.BenutzerKnopf.TabIndex = 0;
+            this.BenutzerKnopf.Text = "Benutzer Verwalten...";
+            this.BenutzerKnopf.UseVisualStyleBackColor = true;
+            this.BenutzerKnopf.Click += new System.EventHandler(this.BenutzerKnopf_Click);
             // 
             // Hauptfenster
             // 
@@ -262,9 +295,10 @@
             tableLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Benutzerliste)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Kontenliste)).EndInit();
+            contextMenuStrip1.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Abrechnungsliste)).EndInit();
-            contextMenuStrip1.ResumeLayout(false);
+            tableLayoutPanel3.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -277,5 +311,6 @@
         private BrightIdeasSoftware.ObjectListView Benutzerliste;
         private BrightIdeasSoftware.OLVColumn GuthabenSpalte;
         private System.Windows.Forms.ToolStripMenuItem neuesKontoToolStripMenuItem;
+        private System.Windows.Forms.Button BenutzerKnopf;
     }
 }

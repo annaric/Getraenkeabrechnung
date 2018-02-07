@@ -24,7 +24,7 @@ namespace Getränkeabrechnung.Modell
         [NotMapped]
         public string Anzeigename { get {
                 var name = Rufname.Equals("") ? Vorname : Rufname;
-                if (Kaution != 0)
+                if (Kaution == 0)
                 {
                     name += "*";
                 }
