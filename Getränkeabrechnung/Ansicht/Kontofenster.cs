@@ -143,12 +143,9 @@ namespace Getränkeabrechnung.Ansicht
             if (!Double.TryParse(BetragBox.Text, NumberStyles.Currency, CultureInfo.CurrentCulture, out double betrag))
                 return; // TODO: Was schöneres hier.
 
-            if (!DatumBox.MaskCompleted || !DateTime.TryParse(DatumBox.Text, out DateTime buchungszeitpunkt))
-                buchungszeitpunkt = DateTime.Now;
-
             var überweisung = new Überweisung()
             {
-                Buchungszeitpunkt = buchungszeitpunkt,
+                Buchungszeitpunkt = DatumBox.Value,
                 Betrag = betrag,
                 Beschreibung = BeschreibungBox.Text
             };
@@ -166,24 +163,7 @@ namespace Getränkeabrechnung.Ansicht
 
             var nachKonto = (Konto)KontoAuswahl.SelectedItem;
 
-            var nachÜberweisung = new Überweisung()
-            {
-                Buchungszeitpunkt = DateTime.Now,
-                Betrag = -betrag,
-                Beschreibung = "Umbuchung nach " + nachKonto.Name,
-                Löschbar = false
-            };
-
-            var vonÜberweisung = new Überweisung()
-            {
-                Buchungszeitpunkt = nachÜberweisung.Buchungszeitpunkt,
-                Betrag = betrag,
-                Beschreibung = "Umbuchung von " + konto.Name,
-                Löschbar = false
-            };
-
-            überweisungssteuerung.NeueÜberweisung(nachKonto, vonÜberweisung);
-            überweisungssteuerung.NeueÜberweisung(konto, nachÜberweisung);
+            kontosteuerung.BucheUm(konto, nachKonto, betrag);
         }
 
         private void NameBox_Leave(object sender, EventArgs e)

@@ -50,18 +50,17 @@ namespace Getränkeabrechnung.Steuerung
 
         public void NeueZahlung(Benutzer benutzer, Konto konto, Zahlung zahlung)
         {
-            NeueZahlung(benutzer, zahlung);
-
             var überweisung = new Überweisung()
             {
                 Erstellungszeitpunkt = zahlung.Erstellungszeitpunkt,
                 Buchungszeitpunkt = zahlung.Buchungszeitpunkt,
                 Betrag = zahlung.Betrag,
-                Beschreibung = string.Format("{0}: {1}", zahlung.Benutzer.Anzeigename, zahlung.Beschreibung),
+                Beschreibung = string.Format("{0}: {1}", benutzer.Anzeigename, zahlung.Beschreibung),
                 Löschbar = false
             };
             Überweisungssteuerung.NeueÜberweisung(konto, überweisung);
             zahlung.Überweisung = überweisung;
+            NeueZahlung(benutzer, zahlung);
         }
     }
 }

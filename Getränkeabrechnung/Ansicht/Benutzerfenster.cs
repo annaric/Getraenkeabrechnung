@@ -42,6 +42,7 @@ namespace Getränkeabrechnung.Ansicht
             KontoSpalte.AspectToStringConverter = (x => x != null ? ((Überweisung)x).Konto.Name : "");
             StornoSpalte.AspectToStringConverter = (x => (Boolean)x ? "Stornieren" : null);
             KontoAuswahl.DisplayMember = "Name";
+            KontoAuswahl2.DisplayMember = "Name";
         }
 
         public Benutzerfenster(Hauptfenster hauptfenster) : this()
@@ -97,6 +98,7 @@ namespace Getränkeabrechnung.Ansicht
             Text = benutzer.Anzeigename;
             NameLabel.Text = benutzer.Anzeigename;
             GuthabenLabel.Text = benutzer.Guthaben.ToString("C");
+            BetragBox2.Text = benutzer.Kaution.ToString("C");
         }
 
         private void FülleKonto(Konto konto = null)
@@ -105,6 +107,11 @@ namespace Getränkeabrechnung.Ansicht
             KontoAuswahl.Items.AddRange(kontosteuerung.Konten.Cast<object>().ToArray());
             if (KontoAuswahl.Items.Count > 0)
                 KontoAuswahl.SelectedIndex = 0;
+
+            KontoAuswahl2.Items.Clear();
+            KontoAuswahl2.Items.AddRange(kontosteuerung.Konten.Cast<object>().ToArray());
+            if (KontoAuswahl2.Items.Count > 0)
+                KontoAuswahl2.SelectedIndex = 0;
         }
 
         private void Benutzerfenster_Load(object sender, EventArgs e)
@@ -143,6 +150,11 @@ namespace Getränkeabrechnung.Ansicht
             Util.BetragBoxFormatieren(BetragBox);
         }
 
+        private void KautionKnopf_Leave(object sender, EventArgs e)
+        {
+            Util.BetragBoxFormatieren(BetragBox2);
+        }
+
         private void HinzufügenKnopf_Click(object sender, EventArgs e)
         {
             if (!Double.TryParse(BetragBox.Text, NumberStyles.Currency, CultureInfo.CurrentCulture, out double betrag))
@@ -151,18 +163,28 @@ namespace Getränkeabrechnung.Ansicht
             if (KontoAuswahl.SelectedItem == null)
                 return; // TODO: Was schöneres hier.
 
-            if (!DatumBox.MaskCompleted || !DateTime.TryParse(DatumBox.Text, out DateTime buchungszeitpunkt))
-                buchungszeitpunkt = DateTime.Now;
-
             var nachKonto = (Konto)KontoAuswahl.SelectedItem;
 
             var zahlung = new Zahlung()
             {
-                Buchungszeitpunkt = buchungszeitpunkt,
+                Buchungszeitpunkt = DatumBox.Value,
                 Betrag = betrag,
                 Beschreibung = BeschreibungBox.Text,
             };
             zahlungssteuerung.NeueZahlung(benutzer, nachKonto, zahlung);
+        }
+
+        private void KautionKnopf_Click(object sender, EventArgs e)
+        {
+            if (!Double.TryParse(BetragBox2.Text, NumberStyles.Currency, CultureInfo.CurrentCulture, out double betrag))
+                return; // TODO: Was schöneres hier.
+
+            if (KontoAuswahl2.SelectedItem == null)
+                return; // TODO: Was schöneres hier.
+
+            var nachKonto = (Konto)KontoAuswahl2.SelectedItem;
+
+            benutzersteuerung.SetzeKaution(benutzer, betrag, nachKonto);
         }
     }
 }

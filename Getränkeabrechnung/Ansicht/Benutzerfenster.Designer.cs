@@ -29,8 +29,14 @@
         private void InitializeComponent()
         {
             System.Windows.Forms.GroupBox groupBox1;
+            System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+            System.Windows.Forms.Label label1;
+            System.Windows.Forms.Label label2;
             System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
             System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+            this.BetragBox2 = new System.Windows.Forms.TextBox();
+            this.KontoAuswahl2 = new System.Windows.Forms.ComboBox();
+            this.KautionKnopf = new System.Windows.Forms.Button();
             this.GuthabenLabel = new System.Windows.Forms.Label();
             this.NameLabel = new System.Windows.Forms.Label();
             this.Zahlungsliste = new BrightIdeasSoftware.ObjectListView();
@@ -46,10 +52,15 @@
             this.HinzufügenKnopf = new System.Windows.Forms.Button();
             this.BeschreibungBox = new System.Windows.Forms.TextBox();
             this.BetragBox = new System.Windows.Forms.TextBox();
-            this.DatumBox = new System.Windows.Forms.MaskedTextBox();
+            this.DatumBox = new System.Windows.Forms.DateTimePicker();
             groupBox1 = new System.Windows.Forms.GroupBox();
+            tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            label1 = new System.Windows.Forms.Label();
+            label2 = new System.Windows.Forms.Label();
             tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            groupBox1.SuspendLayout();
+            tableLayoutPanel3.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Zahlungsliste)).BeginInit();
             tableLayoutPanel2.SuspendLayout();
@@ -58,13 +69,88 @@
             // groupBox1
             // 
             tableLayoutPanel1.SetColumnSpan(groupBox1, 2);
+            groupBox1.Controls.Add(tableLayoutPanel3);
             groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            groupBox1.Location = new System.Drawing.Point(3, 366);
+            groupBox1.Location = new System.Drawing.Point(3, 414);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new System.Drawing.Size(671, 94);
+            groupBox1.Size = new System.Drawing.Size(678, 44);
             groupBox1.TabIndex = 4;
             groupBox1.TabStop = false;
             groupBox1.Text = "Kaution";
+            // 
+            // tableLayoutPanel3
+            // 
+            tableLayoutPanel3.ColumnCount = 6;
+            tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 90F));
+            tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            tableLayoutPanel3.Controls.Add(this.BetragBox2, 3, 0);
+            tableLayoutPanel3.Controls.Add(this.KontoAuswahl2, 1, 0);
+            tableLayoutPanel3.Controls.Add(label1, 0, 0);
+            tableLayoutPanel3.Controls.Add(label2, 2, 0);
+            tableLayoutPanel3.Controls.Add(this.KautionKnopf, 4, 0);
+            tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            tableLayoutPanel3.Location = new System.Drawing.Point(3, 16);
+            tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
+            tableLayoutPanel3.Name = "tableLayoutPanel3";
+            tableLayoutPanel3.RowCount = 1;
+            tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            tableLayoutPanel3.Size = new System.Drawing.Size(672, 25);
+            tableLayoutPanel3.TabIndex = 0;
+            // 
+            // BetragBox2
+            // 
+            this.BetragBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.BetragBox2.Location = new System.Drawing.Point(253, 3);
+            this.BetragBox2.Name = "BetragBox2";
+            this.BetragBox2.Size = new System.Drawing.Size(94, 20);
+            this.BetragBox2.TabIndex = 7;
+            this.BetragBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // KontoAuswahl2
+            // 
+            this.KontoAuswahl2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.KontoAuswahl2.FormattingEnabled = true;
+            this.KontoAuswahl2.Location = new System.Drawing.Point(63, 3);
+            this.KontoAuswahl2.Name = "KontoAuswahl2";
+            this.KontoAuswahl2.Size = new System.Drawing.Size(94, 21);
+            this.KontoAuswahl2.TabIndex = 6;
+            // 
+            // label1
+            // 
+            label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            label1.Location = new System.Drawing.Point(3, 0);
+            label1.Name = "label1";
+            label1.Size = new System.Drawing.Size(54, 25);
+            label1.TabIndex = 0;
+            label1.Text = "Nach:";
+            label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label2
+            // 
+            label2.Dock = System.Windows.Forms.DockStyle.Fill;
+            label2.Location = new System.Drawing.Point(163, 0);
+            label2.Name = "label2";
+            label2.Size = new System.Drawing.Size(84, 25);
+            label2.TabIndex = 6;
+            label2.Text = "Neue Kaution:";
+            label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // KautionKnopf
+            // 
+            this.KautionKnopf.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.KautionKnopf.Location = new System.Drawing.Point(353, 0);
+            this.KautionKnopf.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
+            this.KautionKnopf.Name = "KautionKnopf";
+            this.KautionKnopf.Size = new System.Drawing.Size(94, 25);
+            this.KautionKnopf.TabIndex = 8;
+            this.KautionKnopf.Text = "Kaution Setzen";
+            this.KautionKnopf.UseVisualStyleBackColor = true;
+            this.KautionKnopf.Click += new System.EventHandler(this.KautionKnopf_Click);
+            this.KautionKnopf.Leave += new System.EventHandler(this.KautionKnopf_Leave);
             // 
             // tableLayoutPanel1
             // 
@@ -83,17 +169,17 @@
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 100F));
-            tableLayoutPanel1.Size = new System.Drawing.Size(677, 463);
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            tableLayoutPanel1.Size = new System.Drawing.Size(684, 461);
             tableLayoutPanel1.TabIndex = 0;
             // 
             // GuthabenLabel
             // 
             this.GuthabenLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.GuthabenLabel.Font = new System.Drawing.Font("Arial", 20F, System.Drawing.FontStyle.Bold);
-            this.GuthabenLabel.Location = new System.Drawing.Point(341, 0);
+            this.GuthabenLabel.Location = new System.Drawing.Point(345, 0);
             this.GuthabenLabel.Name = "GuthabenLabel";
-            this.GuthabenLabel.Size = new System.Drawing.Size(333, 60);
+            this.GuthabenLabel.Size = new System.Drawing.Size(336, 60);
             this.GuthabenLabel.TabIndex = 2;
             this.GuthabenLabel.Text = "Guthaben";
             this.GuthabenLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -104,8 +190,8 @@
             this.NameLabel.Font = new System.Drawing.Font("Arial", 20F, System.Drawing.FontStyle.Bold);
             this.NameLabel.Location = new System.Drawing.Point(3, 0);
             this.NameLabel.Name = "NameLabel";
-            this.NameLabel.Size = new System.Drawing.Size(332, 60);
-            this.NameLabel.TabIndex = 1;
+            this.NameLabel.Size = new System.Drawing.Size(336, 60);
+            this.NameLabel.TabIndex = 100;
             this.NameLabel.Text = "Name";
             this.NameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -140,7 +226,7 @@
             this.Zahlungsliste.SelectColumnsOnRightClick = false;
             this.Zahlungsliste.SelectColumnsOnRightClickBehaviour = BrightIdeasSoftware.ObjectListView.ColumnSelectBehaviour.None;
             this.Zahlungsliste.ShowGroups = false;
-            this.Zahlungsliste.Size = new System.Drawing.Size(671, 271);
+            this.Zahlungsliste.Size = new System.Drawing.Size(678, 319);
             this.Zahlungsliste.TabIndex = 3;
             this.Zahlungsliste.UseAlternatingBackColors = true;
             this.Zahlungsliste.UseCompatibleStateImageBehavior = false;
@@ -210,7 +296,7 @@
             // 
             // tableLayoutPanel2
             // 
-            tableLayoutPanel2.ColumnCount = 6;
+            tableLayoutPanel2.ColumnCount = 7;
             tableLayoutPanel1.SetColumnSpan(tableLayoutPanel2, 2);
             tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
             tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
@@ -218,33 +304,34 @@
             tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 65F));
+            tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             tableLayoutPanel2.Controls.Add(this.KontoAuswahl, 4, 0);
             tableLayoutPanel2.Controls.Add(this.HinzufügenKnopf, 5, 0);
             tableLayoutPanel2.Controls.Add(this.BeschreibungBox, 3, 0);
             tableLayoutPanel2.Controls.Add(this.BetragBox, 1, 0);
             tableLayoutPanel2.Controls.Add(this.DatumBox, 0, 0);
             tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            tableLayoutPanel2.Location = new System.Drawing.Point(0, 337);
+            tableLayoutPanel2.Location = new System.Drawing.Point(0, 385);
             tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            tableLayoutPanel2.Size = new System.Drawing.Size(677, 26);
+            tableLayoutPanel2.Size = new System.Drawing.Size(684, 26);
             tableLayoutPanel2.TabIndex = 5;
             // 
             // KontoAuswahl
             // 
             this.KontoAuswahl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.KontoAuswahl.FormattingEnabled = true;
-            this.KontoAuswahl.Location = new System.Drawing.Point(515, 3);
+            this.KontoAuswahl.Location = new System.Drawing.Point(502, 3);
             this.KontoAuswahl.Name = "KontoAuswahl";
             this.KontoAuswahl.Size = new System.Drawing.Size(94, 21);
-            this.KontoAuswahl.TabIndex = 6;
+            this.KontoAuswahl.TabIndex = 4;
             // 
             // HinzufügenKnopf
             // 
             this.HinzufügenKnopf.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.HinzufügenKnopf.Location = new System.Drawing.Point(615, 0);
+            this.HinzufügenKnopf.Location = new System.Drawing.Point(602, 0);
             this.HinzufügenKnopf.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.HinzufügenKnopf.Name = "HinzufügenKnopf";
             this.HinzufügenKnopf.Size = new System.Drawing.Size(59, 26);
@@ -258,8 +345,8 @@
             this.BeschreibungBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.BeschreibungBox.Location = new System.Drawing.Point(283, 3);
             this.BeschreibungBox.Name = "BeschreibungBox";
-            this.BeschreibungBox.Size = new System.Drawing.Size(226, 20);
-            this.BeschreibungBox.TabIndex = 4;
+            this.BeschreibungBox.Size = new System.Drawing.Size(213, 20);
+            this.BeschreibungBox.TabIndex = 3;
             // 
             // BetragBox
             // 
@@ -274,22 +361,25 @@
             // DatumBox
             // 
             this.DatumBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.DatumBox.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.DatumBox.Location = new System.Drawing.Point(3, 3);
-            this.DatumBox.Mask = "00/00/0000";
             this.DatumBox.Name = "DatumBox";
             this.DatumBox.Size = new System.Drawing.Size(74, 20);
             this.DatumBox.TabIndex = 1;
-            this.DatumBox.ValidatingType = typeof(System.DateTime);
             // 
             // Benutzerfenster
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.ClientSize = new System.Drawing.Size(677, 463);
+            this.ClientSize = new System.Drawing.Size(684, 461);
             this.Controls.Add(tableLayoutPanel1);
+            this.MinimumSize = new System.Drawing.Size(700, 500);
             this.Name = "Benutzerfenster";
             this.Text = "Benutzerfenster";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Benutzerfenster_FormClosing);
             this.Load += new System.EventHandler(this.Benutzerfenster_Load);
+            groupBox1.ResumeLayout(false);
+            tableLayoutPanel3.ResumeLayout(false);
+            tableLayoutPanel3.PerformLayout();
             tableLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Zahlungsliste)).EndInit();
             tableLayoutPanel2.ResumeLayout(false);
@@ -310,10 +400,13 @@
         private BrightIdeasSoftware.OLVColumn StornoSpalte;
         private StornoKnopfRenderer stornoKnopfRenderer;
         private BrightIdeasSoftware.OLVColumn ErstellungSpalte;
-        private System.Windows.Forms.MaskedTextBox DatumBox;
         private System.Windows.Forms.TextBox BetragBox;
         private System.Windows.Forms.TextBox BeschreibungBox;
         private System.Windows.Forms.Button HinzufügenKnopf;
         private System.Windows.Forms.ComboBox KontoAuswahl;
+        private System.Windows.Forms.DateTimePicker DatumBox;
+        private System.Windows.Forms.ComboBox KontoAuswahl2;
+        private System.Windows.Forms.TextBox BetragBox2;
+        private System.Windows.Forms.Button KautionKnopf;
     }
 }

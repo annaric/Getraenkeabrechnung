@@ -30,5 +30,27 @@ namespace Getränkeabrechnung.Modell
             überweisung.Konto = this;
             Überweisungen.Add(überweisung);
         }
+
+        public void BucheUm(Konto nachKonto, double betrag, out Überweisung vonÜberweisung, out Überweisung nachÜberweisung)
+        {
+            nachÜberweisung = new Überweisung()
+            {
+                Buchungszeitpunkt = DateTime.Now,
+                Betrag = -betrag,
+                Beschreibung = "Umbuchung nach " + nachKonto.Name,
+                Löschbar = false
+            };
+
+            vonÜberweisung = new Überweisung()
+            {
+                Buchungszeitpunkt = nachÜberweisung.Buchungszeitpunkt,
+                Betrag = betrag,
+                Beschreibung = "Umbuchung von " + Name,
+                Löschbar = false
+            };
+
+            nachKonto.Buche(vonÜberweisung);
+            Buche(nachÜberweisung);
+        }
     }
 }

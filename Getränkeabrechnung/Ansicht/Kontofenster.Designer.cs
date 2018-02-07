@@ -49,8 +49,8 @@
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.HinzufügenKnopf = new System.Windows.Forms.Button();
             this.BeschreibungBox = new System.Windows.Forms.TextBox();
-            this.DatumBox = new System.Windows.Forms.MaskedTextBox();
             this.BetragBox = new System.Windows.Forms.TextBox();
+            this.DatumBox = new System.Windows.Forms.DateTimePicker();
             groupBox1 = new System.Windows.Forms.GroupBox();
             tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             label1 = new System.Windows.Forms.Label();
@@ -68,9 +68,9 @@
             tableLayoutPanel1.SetColumnSpan(groupBox1, 2);
             groupBox1.Controls.Add(tableLayoutPanel3);
             groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            groupBox1.Location = new System.Drawing.Point(3, 485);
+            groupBox1.Location = new System.Drawing.Point(3, 414);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new System.Drawing.Size(646, 44);
+            groupBox1.Size = new System.Drawing.Size(678, 44);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Umbuchen";
@@ -95,7 +95,7 @@
             tableLayoutPanel3.Name = "tableLayoutPanel3";
             tableLayoutPanel3.RowCount = 1;
             tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            tableLayoutPanel3.Size = new System.Drawing.Size(640, 25);
+            tableLayoutPanel3.Size = new System.Drawing.Size(672, 25);
             tableLayoutPanel3.TabIndex = 0;
             // 
             // label1
@@ -116,7 +116,7 @@
             this.KontoAuswahl.Location = new System.Drawing.Point(63, 3);
             this.KontoAuswahl.Name = "KontoAuswahl";
             this.KontoAuswahl.Size = new System.Drawing.Size(134, 21);
-            this.KontoAuswahl.TabIndex = 1;
+            this.KontoAuswahl.TabIndex = 4;
             // 
             // label2
             // 
@@ -134,7 +134,7 @@
             this.BetragBox2.Location = new System.Drawing.Point(263, 3);
             this.BetragBox2.Name = "BetragBox2";
             this.BetragBox2.Size = new System.Drawing.Size(94, 20);
-            this.BetragBox2.TabIndex = 3;
+            this.BetragBox2.TabIndex = 5;
             this.BetragBox2.Leave += new System.EventHandler(this.BetragBox2_Leave);
             // 
             // UmbuchenKnopf
@@ -144,7 +144,7 @@
             this.UmbuchenKnopf.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.UmbuchenKnopf.Name = "UmbuchenKnopf";
             this.UmbuchenKnopf.Size = new System.Drawing.Size(94, 25);
-            this.UmbuchenKnopf.TabIndex = 4;
+            this.UmbuchenKnopf.TabIndex = 6;
             this.UmbuchenKnopf.Text = "Umbuchen";
             this.UmbuchenKnopf.UseVisualStyleBackColor = true;
             this.UmbuchenKnopf.Click += new System.EventHandler(this.UmbuchenKnopf_Click);
@@ -167,7 +167,7 @@
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            tableLayoutPanel1.Size = new System.Drawing.Size(652, 532);
+            tableLayoutPanel1.Size = new System.Drawing.Size(684, 461);
             tableLayoutPanel1.TabIndex = 0;
             // 
             // Überweisungsliste
@@ -199,8 +199,8 @@
             this.Überweisungsliste.SelectColumnsOnRightClick = false;
             this.Überweisungsliste.SelectColumnsOnRightClickBehaviour = BrightIdeasSoftware.ObjectListView.ColumnSelectBehaviour.None;
             this.Überweisungsliste.ShowGroups = false;
-            this.Überweisungsliste.Size = new System.Drawing.Size(646, 390);
-            this.Überweisungsliste.TabIndex = 1;
+            this.Überweisungsliste.Size = new System.Drawing.Size(678, 319);
+            this.Überweisungsliste.TabIndex = 10;
             this.Überweisungsliste.UseAlternatingBackColors = true;
             this.Überweisungsliste.UseCompatibleStateImageBehavior = false;
             this.Überweisungsliste.View = System.Windows.Forms.View.Details;
@@ -264,9 +264,9 @@
             // 
             this.KontostandLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.KontostandLabel.Font = new System.Drawing.Font("Arial", 20F, System.Drawing.FontStyle.Bold);
-            this.KontostandLabel.Location = new System.Drawing.Point(329, 0);
+            this.KontostandLabel.Location = new System.Drawing.Point(345, 0);
             this.KontostandLabel.Name = "KontostandLabel";
-            this.KontostandLabel.Size = new System.Drawing.Size(320, 60);
+            this.KontostandLabel.Size = new System.Drawing.Size(336, 60);
             this.KontostandLabel.TabIndex = 3;
             this.KontostandLabel.Text = "Kontostand";
             this.KontostandLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -279,8 +279,8 @@
             this.NameBox.Font = new System.Drawing.Font("Arial", 20F, System.Drawing.FontStyle.Bold);
             this.NameBox.Location = new System.Drawing.Point(3, 14);
             this.NameBox.Name = "NameBox";
-            this.NameBox.Size = new System.Drawing.Size(320, 31);
-            this.NameBox.TabIndex = 10;
+            this.NameBox.Size = new System.Drawing.Size(336, 31);
+            this.NameBox.TabIndex = 100;
             this.NameBox.TabStop = false;
             this.NameBox.Text = "Name";
             this.NameBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.NameBox_KeyUp);
@@ -288,34 +288,35 @@
             // 
             // tableLayoutPanel2
             // 
-            this.tableLayoutPanel2.ColumnCount = 5;
+            this.tableLayoutPanel2.ColumnCount = 6;
             tableLayoutPanel1.SetColumnSpan(this.tableLayoutPanel2, 2);
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 65F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel2.Controls.Add(this.HinzufügenKnopf, 4, 0);
             this.tableLayoutPanel2.Controls.Add(this.BeschreibungBox, 3, 0);
-            this.tableLayoutPanel2.Controls.Add(this.DatumBox, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.BetragBox, 1, 0);
+            this.tableLayoutPanel2.Controls.Add(this.DatumBox, 0, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 456);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 385);
             this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(652, 26);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(684, 26);
             this.tableLayoutPanel2.TabIndex = 6;
             // 
             // HinzufügenKnopf
             // 
             this.HinzufügenKnopf.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.HinzufügenKnopf.Location = new System.Drawing.Point(590, 0);
+            this.HinzufügenKnopf.Location = new System.Drawing.Point(602, 0);
             this.HinzufügenKnopf.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.HinzufügenKnopf.Name = "HinzufügenKnopf";
             this.HinzufügenKnopf.Size = new System.Drawing.Size(59, 26);
-            this.HinzufügenKnopf.TabIndex = 4;
+            this.HinzufügenKnopf.TabIndex = 3;
             this.HinzufügenKnopf.Text = "+";
             this.HinzufügenKnopf.UseVisualStyleBackColor = true;
             this.HinzufügenKnopf.Click += new System.EventHandler(this.HinzufügenKnopf_Click);
@@ -325,19 +326,9 @@
             this.BeschreibungBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.BeschreibungBox.Location = new System.Drawing.Point(283, 3);
             this.BeschreibungBox.Name = "BeschreibungBox";
-            this.BeschreibungBox.Size = new System.Drawing.Size(301, 20);
-            this.BeschreibungBox.TabIndex = 3;
-            // 
-            // DatumBox
-            // 
-            this.DatumBox.AllowPromptAsInput = false;
-            this.DatumBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DatumBox.Location = new System.Drawing.Point(3, 3);
-            this.DatumBox.Mask = "00/00/0000";
-            this.DatumBox.Name = "DatumBox";
-            this.DatumBox.Size = new System.Drawing.Size(74, 20);
-            this.DatumBox.TabIndex = 0;
-            this.DatumBox.ValidatingType = typeof(System.DateTime);
+            this.BeschreibungBox.Size = new System.Drawing.Size(313, 20);
+            this.BeschreibungBox.TabIndex = 2;
+            this.BeschreibungBox.Text = "Beschreibung";
             // 
             // BetragBox
             // 
@@ -345,15 +336,25 @@
             this.BetragBox.Location = new System.Drawing.Point(83, 3);
             this.BetragBox.Name = "BetragBox";
             this.BetragBox.Size = new System.Drawing.Size(94, 20);
-            this.BetragBox.TabIndex = 0;
+            this.BetragBox.TabIndex = 1;
             this.BetragBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.BetragBox.Leave += new System.EventHandler(this.BetragBox_Leave);
+            // 
+            // DatumBox
+            // 
+            this.DatumBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.DatumBox.Format = System.Windows.Forms.DateTimePickerFormat.Short;
+            this.DatumBox.Location = new System.Drawing.Point(3, 3);
+            this.DatumBox.Name = "DatumBox";
+            this.DatumBox.Size = new System.Drawing.Size(74, 20);
+            this.DatumBox.TabIndex = 0;
             // 
             // Kontofenster
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.ClientSize = new System.Drawing.Size(652, 532);
+            this.ClientSize = new System.Drawing.Size(684, 461);
             this.Controls.Add(tableLayoutPanel1);
+            this.MinimumSize = new System.Drawing.Size(700, 500);
             this.Name = "Kontofenster";
             this.Text = "Kontofenster";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Kontofenster_FormClosing);
@@ -381,7 +382,6 @@
         private BrightIdeasSoftware.OLVColumn StornoSpalte;
         private StornoKnopfRenderer stornoKnopfRenderer1;
         private BrightIdeasSoftware.OLVColumn ErstellungSpalte;
-        private System.Windows.Forms.MaskedTextBox DatumBox;
         private System.Windows.Forms.TextBox BeschreibungBox;
         private System.Windows.Forms.Button HinzufügenKnopf;
         private System.Windows.Forms.TextBox BetragBox;
@@ -389,5 +389,6 @@
         private System.Windows.Forms.ComboBox KontoAuswahl;
         private System.Windows.Forms.TextBox BetragBox2;
         private System.Windows.Forms.Button UmbuchenKnopf;
+        private System.Windows.Forms.DateTimePicker DatumBox;
     }
 }

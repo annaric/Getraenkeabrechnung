@@ -25,5 +25,13 @@ namespace Getränkeabrechnung.Steuerung
             Kontext.SaveChanges();
             KontoVerändert?.Invoke(konto);
         }
+
+        public void BucheUm(Konto vonKonto, Konto nachKonto, double betrag)
+        {
+            vonKonto.BucheUm(nachKonto, betrag, out Überweisung vonÜberweisung, out Überweisung nachÜberweisung);
+
+            Überweisungssteuerung.NeueÜberweisung(vonÜberweisung);
+            Überweisungssteuerung.NeueÜberweisung(nachÜberweisung);
+        }
     }
 }
