@@ -84,12 +84,12 @@ namespace Getränkeabrechnung
                 var produkt = new Produkt() {
                     Name = name,
                     Einkaufspreis = purchaseprice,
-                    Aktiv = active,
-                    Kistengröße = cratesize,
-                    ListenPosition = position,
-                    Pfand = deposit,
+                    // Aktiv = active,
+                    Kastengröße = cratesize,
+                    // ListenPosition = position,
+                    // Pfand = deposit,
                     Preis = price,
-                    Versteckt = hidden
+                    Versteckt = hidden || !active
                 };
                 produkte[id] = produkt;
             }
@@ -106,6 +106,7 @@ namespace Getränkeabrechnung
                 }
                 produkte[id].Elternprodukt = produkte[ancestor];
             }
+
             command = connection.CreateCommand();
             command.CommandText = "select * from cgross_drinkaccounting_domain_model_account";
             result = command.ExecuteReader();
@@ -319,6 +320,7 @@ namespace Getränkeabrechnung
                 string product_id = result["drinkaccounting_product"] as string;
 
                 abrechnungen[statement_id].Produkte.Add(produkte[product_id]);
+                produkte[product_id].Abrechnungen.Add(abrechnungen[statement_id]);
             }
 
             command = connection.CreateCommand();

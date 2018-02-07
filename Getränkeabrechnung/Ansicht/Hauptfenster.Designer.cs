@@ -45,6 +45,7 @@
             this.Abrechnungsliste = new BrightIdeasSoftware.ObjectListView();
             this.StatusSpalte = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.BenutzerKnopf = new System.Windows.Forms.Button();
+            this.ProduktKnopf = new System.Windows.Forms.Button();
             tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             Benutzerspalte = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             label1 = new System.Windows.Forms.Label();
@@ -261,6 +262,7 @@
             tableLayoutPanel3.ColumnCount = 1;
             tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             tableLayoutPanel3.Controls.Add(this.BenutzerKnopf, 0, 0);
+            tableLayoutPanel3.Controls.Add(this.ProduktKnopf, 0, 1);
             tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
             tableLayoutPanel3.Location = new System.Drawing.Point(0, 195);
             tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
@@ -282,6 +284,17 @@
             this.BenutzerKnopf.Text = "Benutzer Verwalten...";
             this.BenutzerKnopf.UseVisualStyleBackColor = true;
             this.BenutzerKnopf.Click += new System.EventHandler(this.BenutzerKnopf_Click);
+            // 
+            // ProduktKnopf
+            // 
+            this.ProduktKnopf.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ProduktKnopf.Location = new System.Drawing.Point(3, 43);
+            this.ProduktKnopf.Name = "ProduktKnopf";
+            this.ProduktKnopf.Size = new System.Drawing.Size(236, 34);
+            this.ProduktKnopf.TabIndex = 1;
+            this.ProduktKnopf.Text = "Produkte Verwalten...";
+            this.ProduktKnopf.UseVisualStyleBackColor = true;
+            this.ProduktKnopf.Click += new System.EventHandler(this.ProduktKnopf_Click);
             // 
             // Hauptfenster
             // 
@@ -312,5 +325,6 @@
         private BrightIdeasSoftware.OLVColumn GuthabenSpalte;
         private System.Windows.Forms.ToolStripMenuItem neuesKontoToolStripMenuItem;
         private System.Windows.Forms.Button BenutzerKnopf;
+        private System.Windows.Forms.Button ProduktKnopf;
     }
 }

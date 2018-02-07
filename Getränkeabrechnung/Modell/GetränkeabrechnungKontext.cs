@@ -40,7 +40,7 @@ namespace Getränkeabrechnung.Modell
 
             modelBuilder.Entity<Abrechnung>()
                 .HasMany(s => s.Produkte)
-                .WithMany()
+                .WithMany(p => p.Abrechnungen)
                 .Map(m =>
                 {
                     m.MapLeftKey("Abrechnung_Id");
@@ -56,6 +56,10 @@ namespace Getränkeabrechnung.Modell
                     m.MapRightKey("Benutzer_Id");
                     m.ToTable("AbrechnungBenutzer");
                 });
+
+            /*modelBuilder.Entity<Produkt>()
+                .HasOptional(p => p.Elternprodukt)
+                .WithMany(p => p.Kinder);*/
         }
     }
 }

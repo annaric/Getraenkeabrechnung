@@ -29,7 +29,7 @@ namespace Getränkeabrechnung.Modell
         {
             Produkte = new List<Produkt>();
             Zahlungen = new List<Zahlung>();
-            Benutzer = new List<Modell.Benutzer>();
+            Benutzer = new List<Benutzer>();
             Bestände = new List<Bestand>();
             Einkäufe = new List<Einkauf>();
             Verbrauche = new List<Verbrauch>();

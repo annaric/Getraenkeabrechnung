@@ -17,12 +17,14 @@ namespace Getränkeabrechnung.Steuerung
         private Abrechnungssteuerung abrechnungssteuerung;
         private Benutzersteuerung benutzersteuerung;
         private Kontosteuerung kontosteuerung;
+        private Produktsteuerung produktsteuerung;
         private Überweisungssteuerung überweisungssteuerung;
         private Zahlungssteuerung zahlungssteuerung;
 
         public override Abrechnungssteuerung Abrechnungssteuerung => abrechnungssteuerung;
         public override Benutzersteuerung Benutzersteuerung =>benutzersteuerung;
         public override Kontosteuerung Kontosteuerung => kontosteuerung;
+        public override Produktsteuerung Produktsteuerung => produktsteuerung;
         public override Überweisungssteuerung Überweisungssteuerung => überweisungssteuerung;
         public override Zahlungssteuerung Zahlungssteuerung => zahlungssteuerung;
 
@@ -32,6 +34,7 @@ namespace Getränkeabrechnung.Steuerung
             abrechnungssteuerung = new Abrechnungssteuerung(this);
             benutzersteuerung = new Benutzersteuerung(this);
             kontosteuerung = new Kontosteuerung(this);
+            produktsteuerung = new Produktsteuerung(this);
             überweisungssteuerung = new Überweisungssteuerung(this);
             zahlungssteuerung = new Zahlungssteuerung(this);
         }

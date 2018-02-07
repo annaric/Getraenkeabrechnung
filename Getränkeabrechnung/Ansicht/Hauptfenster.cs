@@ -22,6 +22,7 @@ namespace Getränkeabrechnung.Ansicht
         private Benutzerfenster _benutzerfenster;
         private Kontofenster _kontofenster;
         private BenutzerListefenster _benutzerListefenster;
+        private Produktfenster _produktfenster;
 
         public Benutzerfenster Benutzerfenster
         {
@@ -50,6 +51,16 @@ namespace Getränkeabrechnung.Ansicht
                 if (_benutzerListefenster == null || _benutzerListefenster.IsDisposed)
                     _benutzerListefenster = new BenutzerListefenster(this);
                 return _benutzerListefenster;
+            }
+        }
+
+        public Produktfenster Produktfenster
+        {
+            get
+            {
+                if (_produktfenster == null || _produktfenster.IsDisposed)
+                    _produktfenster = new Produktfenster(this);
+                return _produktfenster;
             }
         }
 
@@ -171,6 +182,12 @@ namespace Getränkeabrechnung.Ansicht
         {
             BenutzerListefenster.Show();
             BenutzerListefenster.Focus();
+        }
+
+        private void ProduktKnopf_Click(object sender, EventArgs e)
+        {
+            Produktfenster.Show();
+            Produktfenster.Focus();
         }
     }
 }

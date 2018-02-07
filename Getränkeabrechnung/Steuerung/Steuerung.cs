@@ -14,6 +14,7 @@ namespace Getränkeabrechnung.Steuerung
         public virtual Abrechnungssteuerung Abrechnungssteuerung => Datenbanksteuerung.Abrechnungssteuerung;
         public virtual Benutzersteuerung Benutzersteuerung => Datenbanksteuerung.Benutzersteuerung;
         public virtual Kontosteuerung Kontosteuerung => Datenbanksteuerung.Kontosteuerung;
+        public virtual Produktsteuerung Produktsteuerung => Datenbanksteuerung.Produktsteuerung;
         public virtual Überweisungssteuerung Überweisungssteuerung => Datenbanksteuerung.Überweisungssteuerung;
         public virtual Zahlungssteuerung Zahlungssteuerung => Datenbanksteuerung.Zahlungssteuerung;
 

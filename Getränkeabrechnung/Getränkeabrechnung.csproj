@@ -101,6 +101,12 @@
     <Compile Include="Ansicht\Kontofenster.Designer.cs">
       <DependentUpon>Kontofenster.cs</DependentUpon>
     </Compile>
+    <Compile Include="Ansicht\Produktfenster.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ansicht\Produktfenster.Designer.cs">
+      <DependentUpon>Produktfenster.cs</DependentUpon>
+    </Compile>
     <Compile Include="Ansicht\StornoKnopfRenderer.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -132,6 +138,7 @@
     <Compile Include="Steuerung\Benutzersteuerung.cs" />
     <Compile Include="Steuerung\Datenbanksteuerung.cs" />
     <Compile Include="Steuerung\Kontosteuerung.cs" />
+    <Compile Include="Steuerung\Produktsteuerung.cs" />
     <Compile Include="Steuerung\Steuerung.cs" />
     <Compile Include="Steuerung\Zahlungssteuerung.cs" />
     <Compile Include="Steuerung\Überweisungssteuerung.cs" />
@@ -158,6 +165,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Ansicht\Kontofenster.resx">
       <DependentUpon>Kontofenster.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ansicht\Produktfenster.resx">
+      <DependentUpon>Produktfenster.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
