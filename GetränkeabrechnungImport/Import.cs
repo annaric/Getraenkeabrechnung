@@ -278,13 +278,15 @@ namespace Getränkeabrechnung
                 DateTime purchasedate = (DateTime)result["purchasedate"];
                 string invoicetext = result["invoictext"] as string; // ja stimmt so
                 double sum = (double)result["sum"];
+                string transaction_id = result["transaction"] as string;
                 string statement_id = result["statement"] as string;
 
                 var einkauf = new Einkauf()
                 {
                     Abrechnung = abrechnungen[statement_id],
+                    Überweisung = überweisungen[transaction_id],
                     Zeitpunkt = purchasedate,
-                    Rechungsnummer = invoicetext,
+                    Rechnungsnummer = invoicetext,
                     Betrag = sum
                 };
                 einkäufe[id] = einkauf;

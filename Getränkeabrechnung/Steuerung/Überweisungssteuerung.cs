@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Getränkeabrechnung.Steuerung
 {
-    class Überweisungssteuerung : Steuerung
+    public class Überweisungssteuerung : Steuerung
     {
         public delegate void ÜberweisungHandler(Überweisung überweisung);
         public event ÜberweisungHandler ÜberweisungVerändert;
@@ -37,9 +37,9 @@ namespace Getränkeabrechnung.Steuerung
             NeueÜberweisung(überweisung);
         }
 
-        public void StorniereÜberweisung(Überweisung überweisung)
+        public void StorniereÜberweisung(Überweisung überweisung, bool erzwinge = false)
         {
-            if (!überweisung.Löschbar)
+            if (!überweisung.Löschbar && !erzwinge)
                 throw new InvalidOperationException("Diese Überweisung ist nicht löschbar.");
 
             var stornoÜberweisung = überweisung.Storniere();

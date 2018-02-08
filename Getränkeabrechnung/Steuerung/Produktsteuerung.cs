@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Getränkeabrechnung.Steuerung
 {
-    class Produktsteuerung : Steuerung
+    public class Produktsteuerung : Steuerung
     {
         public delegate void ProduktHandler(Produkt produkt);
         public event ProduktHandler ProduktVerändert;
@@ -19,14 +19,29 @@ namespace Getränkeabrechnung.Steuerung
 
         public IEnumerable<Produkt> Produkte => Kontext.Produkte.AsEnumerable();
 
-        private bool KannBearbeitetWerden(Produkt produkt) => !produkt.Abrechnungen.Any();
+        public bool KannBearbeitetWerden(Produkt produkt)
+        {
+            return !BenutzteProdukte.Distinct().ToList().Contains(produkt);
+        }
+
+        public IEnumerable<Produkt> BenutzteProdukte
+        {
+            get
+            {
+                return Kontext.Einkaufspositionen
+                    .Where(p => p.Einkauf.Abrechnung == null || !p.Einkauf.Abrechnung.Abgerechnet)
+                    .Select(p => p.Produkt);
+            }
+        }
+
+        private bool KannMitKlonenBearbeitetWerden(Produkt produkt) => !produkt.Abrechnungen.Any(a => a.Abgerechnet);
 
         public Produkt BearbeitbaresProdukt(Produkt produkt)
         {
             var sdkfjlskdjf = Produkte.Select(p => p.Abrechnungen.Count).ToArray();
 
             // Wenn das Produkt nicht Teil einer schon abregerechneten Abrechnung ist, kann es bearbeitet werden.
-            if (KannBearbeitetWerden(produkt))
+            if (KannMitKlonenBearbeitetWerden(produkt))
                 return produkt;
             else
                 return produkt.Klone();
@@ -50,6 +65,7 @@ namespace Getränkeabrechnung.Steuerung
         public void NeuesProdukt(Produkt produkt)
         {
             Kontext.Produkte.Add(produkt);
+            Kontext.SaveChanges();
             ProduktHinzugefügt?.Invoke(produkt);
         }
     }

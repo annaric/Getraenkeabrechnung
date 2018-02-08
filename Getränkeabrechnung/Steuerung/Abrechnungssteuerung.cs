@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Getränkeabrechnung.Steuerung
 {
-    class Abrechnungssteuerung : Steuerung
+    public class Abrechnungssteuerung : Steuerung
     {
         public delegate void AbrechnungVerändertHandler(Abrechnung abrechnung);
         public event AbrechnungVerändertHandler AbrechnungVerändert;

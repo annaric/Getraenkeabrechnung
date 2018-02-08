@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Getränkeabrechnung.Steuerung
 {
-    class Benutzersteuerung : Steuerung
+    public class Benutzersteuerung : Steuerung
     {
         public delegate void BenutzerHandler(Benutzer benutzer);
         public event BenutzerHandler BenutzerVerändert;

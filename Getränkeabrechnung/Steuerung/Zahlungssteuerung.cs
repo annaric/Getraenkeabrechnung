@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Getränkeabrechnung.Steuerung
 {
-    class Zahlungssteuerung : Steuerung
+    public class Zahlungssteuerung : Steuerung
     {
         public delegate void ZahlungHandler(Zahlung zahlung);
         public event ZahlungHandler ZahlungVerändert;

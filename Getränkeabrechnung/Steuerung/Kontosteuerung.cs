@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Getränkeabrechnung.Steuerung
 {
-    class Kontosteuerung : Steuerung
+    public class Kontosteuerung : Steuerung
     {
         public delegate void KontoHandler(Konto konto);
         public event KontoHandler KontoVerändert;

@@ -23,6 +23,7 @@ namespace Getränkeabrechnung.Ansicht
         private Kontofenster _kontofenster;
         private BenutzerListefenster _benutzerListefenster;
         private Produktfenster _produktfenster;
+        private Einkäufefenster _einkäufefenster;
 
         public Benutzerfenster Benutzerfenster
         {
@@ -61,6 +62,16 @@ namespace Getränkeabrechnung.Ansicht
                 if (_produktfenster == null || _produktfenster.IsDisposed)
                     _produktfenster = new Produktfenster(this);
                 return _produktfenster;
+            }
+        }
+
+        public Einkäufefenster Einkäufefenster
+        {
+            get
+            {
+                if (_einkäufefenster == null || _einkäufefenster.IsDisposed)
+                    _einkäufefenster = new Einkäufefenster(this);
+                return _einkäufefenster;
             }
         }
 
@@ -143,7 +154,7 @@ namespace Getränkeabrechnung.Ansicht
             Steuerung.Schließe();
         }
 
-        private void Benutzerliste_FormatCell(object sender, BrightIdeasSoftware.FormatCellEventArgs e)
+        private void Benutzerliste_FormatCell(object sender, FormatCellEventArgs e)
         {
             if (e.ColumnIndex == GuthabenSpalte.Index)
             {
@@ -151,7 +162,7 @@ namespace Getränkeabrechnung.Ansicht
             }
         }
 
-        private void Abrechnungsliste_FormatCell(object sender, BrightIdeasSoftware.FormatCellEventArgs e)
+        private void Abrechnungsliste_FormatCell(object sender, FormatCellEventArgs e)
         {
             if (e.ColumnIndex == StatusSpalte.Index)
             {
@@ -188,6 +199,12 @@ namespace Getränkeabrechnung.Ansicht
         {
             Produktfenster.Show();
             Produktfenster.Focus();
+        }
+
+        private void EinkäufeKnopf_Click(object sender, EventArgs e)
+        {
+            Einkäufefenster.Show();
+            Einkäufefenster.Focus();
         }
     }
 }

@@ -38,6 +38,7 @@
             this.EinkaufspreisSpalte = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.PreisSpalte = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.VerstecktSpalte = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
             stornoKnopfRenderer1 = new Getränkeabrechnung.Ansicht.StornoKnopfRenderer();
             contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             contextMenuStrip1.SuspendLayout();
@@ -82,14 +83,14 @@
             this.ProduktListe.Cursor = System.Windows.Forms.Cursors.Default;
             this.ProduktListe.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ProduktListe.FullRowSelect = true;
-            this.ProduktListe.Location = new System.Drawing.Point(0, 0);
+            this.ProduktListe.Location = new System.Drawing.Point(10, 10);
             this.ProduktListe.MultiSelect = false;
             this.ProduktListe.Name = "ProduktListe";
             this.ProduktListe.RowHeight = 20;
             this.ProduktListe.SelectColumnsOnRightClick = false;
             this.ProduktListe.SelectColumnsOnRightClickBehaviour = BrightIdeasSoftware.ObjectListView.ColumnSelectBehaviour.None;
             this.ProduktListe.ShowGroups = false;
-            this.ProduktListe.Size = new System.Drawing.Size(594, 449);
+            this.ProduktListe.Size = new System.Drawing.Size(574, 429);
             this.ProduktListe.TabIndex = 0;
             this.ProduktListe.UseAlternatingBackColors = true;
             this.ProduktListe.UseCompatibleStateImageBehavior = false;
@@ -98,6 +99,8 @@
             this.ProduktListe.ButtonClick += new System.EventHandler<BrightIdeasSoftware.CellClickEventArgs>(this.ProduktListe_ButtonClick);
             this.ProduktListe.CellEditFinished += new BrightIdeasSoftware.CellEditEventHandler(this.ProduktListe_CellEditFinished);
             this.ProduktListe.CellEditFinishing += new BrightIdeasSoftware.CellEditEventHandler(this.ProduktListe_CellEditFinishing);
+            this.ProduktListe.CellEditStarting += new BrightIdeasSoftware.CellEditEventHandler(this.ProduktListe_CellEditStarting);
+            this.ProduktListe.CellToolTipShowing += new System.EventHandler<BrightIdeasSoftware.ToolTipShowingEventArgs>(this.ProduktListe_CellToolTipShowing);
             // 
             // NameSpalte
             // 
@@ -136,11 +139,20 @@
             // 
             // VerstecktSpalte
             // 
-            this.VerstecktSpalte.AspectName = "Versteckt";
+            this.VerstecktSpalte.AspectName = "";
             this.VerstecktSpalte.IsButton = true;
             this.VerstecktSpalte.Renderer = stornoKnopfRenderer1;
             this.VerstecktSpalte.Text = "";
             this.VerstecktSpalte.Width = 65;
+            // 
+            // ToolTip
+            // 
+            this.ToolTip.AutoPopDelay = 6000;
+            this.ToolTip.InitialDelay = 500;
+            this.ToolTip.ReshowDelay = 100;
+            this.ToolTip.ShowAlways = true;
+            this.ToolTip.UseAnimation = false;
+            this.ToolTip.UseFading = false;
             // 
             // Produktfenster
             // 
@@ -148,6 +160,7 @@
             this.ClientSize = new System.Drawing.Size(594, 449);
             this.Controls.Add(this.ProduktListe);
             this.Name = "Produktfenster";
+            this.Padding = new System.Windows.Forms.Padding(10);
             this.Text = "Produkte";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Produktfenster_FormClosing);
             this.Load += new System.EventHandler(this.Produktfenster_Load);
@@ -166,5 +179,6 @@
         private BrightIdeasSoftware.OLVColumn PreisSpalte;
         private BrightIdeasSoftware.OLVColumn VerstecktSpalte;
         private System.Windows.Forms.ToolStripMenuItem NeuesProduktKnopf;
+        private System.Windows.Forms.ToolTip ToolTip;
     }
 }

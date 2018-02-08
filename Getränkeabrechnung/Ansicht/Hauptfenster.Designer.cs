@@ -46,6 +46,7 @@
             this.StatusSpalte = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.BenutzerKnopf = new System.Windows.Forms.Button();
             this.ProduktKnopf = new System.Windows.Forms.Button();
+            this.EinkäufeKnopf = new System.Windows.Forms.Button();
             tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             Benutzerspalte = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             label1 = new System.Windows.Forms.Label();
@@ -263,11 +264,14 @@
             tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             tableLayoutPanel3.Controls.Add(this.BenutzerKnopf, 0, 0);
             tableLayoutPanel3.Controls.Add(this.ProduktKnopf, 0, 1);
+            tableLayoutPanel3.Controls.Add(this.EinkäufeKnopf, 0, 2);
             tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
             tableLayoutPanel3.Location = new System.Drawing.Point(0, 195);
             tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
-            tableLayoutPanel3.RowCount = 3;
+            tableLayoutPanel3.RowCount = 5;
+            tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -277,9 +281,10 @@
             // BenutzerKnopf
             // 
             this.BenutzerKnopf.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.BenutzerKnopf.Location = new System.Drawing.Point(3, 3);
+            this.BenutzerKnopf.Location = new System.Drawing.Point(10, 3);
+            this.BenutzerKnopf.Margin = new System.Windows.Forms.Padding(10, 3, 10, 3);
             this.BenutzerKnopf.Name = "BenutzerKnopf";
-            this.BenutzerKnopf.Size = new System.Drawing.Size(236, 34);
+            this.BenutzerKnopf.Size = new System.Drawing.Size(222, 34);
             this.BenutzerKnopf.TabIndex = 0;
             this.BenutzerKnopf.Text = "Benutzer Verwalten...";
             this.BenutzerKnopf.UseVisualStyleBackColor = true;
@@ -288,13 +293,26 @@
             // ProduktKnopf
             // 
             this.ProduktKnopf.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ProduktKnopf.Location = new System.Drawing.Point(3, 43);
+            this.ProduktKnopf.Location = new System.Drawing.Point(10, 43);
+            this.ProduktKnopf.Margin = new System.Windows.Forms.Padding(10, 3, 10, 3);
             this.ProduktKnopf.Name = "ProduktKnopf";
-            this.ProduktKnopf.Size = new System.Drawing.Size(236, 34);
+            this.ProduktKnopf.Size = new System.Drawing.Size(222, 34);
             this.ProduktKnopf.TabIndex = 1;
             this.ProduktKnopf.Text = "Produkte Verwalten...";
             this.ProduktKnopf.UseVisualStyleBackColor = true;
             this.ProduktKnopf.Click += new System.EventHandler(this.ProduktKnopf_Click);
+            // 
+            // EinkäufeKnopf
+            // 
+            this.EinkäufeKnopf.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.EinkäufeKnopf.Location = new System.Drawing.Point(10, 83);
+            this.EinkäufeKnopf.Margin = new System.Windows.Forms.Padding(10, 3, 10, 3);
+            this.EinkäufeKnopf.Name = "EinkäufeKnopf";
+            this.EinkäufeKnopf.Size = new System.Drawing.Size(222, 34);
+            this.EinkäufeKnopf.TabIndex = 2;
+            this.EinkäufeKnopf.Text = "Einkäufe Verwalten...";
+            this.EinkäufeKnopf.UseVisualStyleBackColor = true;
+            this.EinkäufeKnopf.Click += new System.EventHandler(this.EinkäufeKnopf_Click);
             // 
             // Hauptfenster
             // 
@@ -326,5 +344,6 @@
         private System.Windows.Forms.ToolStripMenuItem neuesKontoToolStripMenuItem;
         private System.Windows.Forms.Button BenutzerKnopf;
         private System.Windows.Forms.Button ProduktKnopf;
+        private System.Windows.Forms.Button EinkäufeKnopf;
     }
 }

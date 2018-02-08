@@ -83,6 +83,18 @@
     <Compile Include="Ansicht\BenutzerListefenster.Designer.cs">
       <DependentUpon>BenutzerListefenster.cs</DependentUpon>
     </Compile>
+    <Compile Include="Ansicht\BetragBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Ansicht\BetragBox.Designer.cs">
+      <DependentUpon>BetragBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ansicht\Einkäufefenster.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ansicht\Einkäufefenster.Designer.cs">
+      <DependentUpon>Einkäufefenster.cs</DependentUpon>
+    </Compile>
     <Compile Include="Ansicht\GetränkeabrechnungFenster.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -95,11 +107,23 @@
     <Compile Include="Ansicht\Hauptfenster.Designer.cs">
       <DependentUpon>Hauptfenster.cs</DependentUpon>
     </Compile>
+    <Compile Include="Ansicht\KontoBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Ansicht\KontoBox.Designer.cs">
+      <DependentUpon>KontoBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="Ansicht\Kontofenster.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Ansicht\Kontofenster.Designer.cs">
       <DependentUpon>Kontofenster.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ansicht\ProduktBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Ansicht\ProduktBox.Designer.cs">
+      <DependentUpon>ProduktBox.cs</DependentUpon>
     </Compile>
     <Compile Include="Ansicht\Produktfenster.cs">
       <SubType>Form</SubType>
@@ -137,6 +161,8 @@
     <Compile Include="Steuerung\Abrechnungssteuerung.cs" />
     <Compile Include="Steuerung\Benutzersteuerung.cs" />
     <Compile Include="Steuerung\Datenbanksteuerung.cs" />
+    <Compile Include="Steuerung\Einkaufspositionssteuerung.cs" />
+    <Compile Include="Steuerung\Einkaufsteuerung.cs" />
     <Compile Include="Steuerung\Kontosteuerung.cs" />
     <Compile Include="Steuerung\Produktsteuerung.cs" />
     <Compile Include="Steuerung\Steuerung.cs" />
@@ -160,8 +186,18 @@
     <EmbeddedResource Include="Ansicht\BenutzerListefenster.resx">
       <DependentUpon>BenutzerListefenster.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Ansicht\BetragBox.resx">
+      <DependentUpon>BetragBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ansicht\Einkäufefenster.resx">
+      <DependentUpon>Einkäufefenster.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ansicht\Hauptfenster.resx">
       <DependentUpon>Hauptfenster.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ansicht\KontoBox.resx">
+      <DependentUpon>KontoBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Ansicht\Kontofenster.resx">
       <DependentUpon>Kontofenster.cs</DependentUpon>
