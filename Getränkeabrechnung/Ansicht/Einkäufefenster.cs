@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
@@ -14,6 +15,7 @@ namespace Getränkeabrechnung.Ansicht
     {
         private Einkaufsteuerung einkaufsteuerung;
         private Einkaufspositionssteuerung positionssteuerung;
+        private Abrechnungssteuerung abrechnungssteuerung;
 
         private Einkauf Einkauf => (Einkauf)Einkäufeliste.SelectedObject;
 
@@ -27,9 +29,10 @@ namespace Getränkeabrechnung.Ansicht
             Hauptfenster = hauptfenster;
             einkaufsteuerung = hauptfenster.Steuerung.Einkaufsteuerung;
             positionssteuerung = hauptfenster.Steuerung.Einkaufspositionssteuerung;
+            abrechnungssteuerung = hauptfenster.Steuerung.Abrechnungssteuerung;
 
             AbrechnungSpalte.AspectToStringConverter = (a => ((Abrechnung)a)?.Name);
-            EinkaufLöschenSpalte.AspectToStringConverter = (a => (a == null || !((Abrechnung)a).Abgerechnet) ? "Löschen" : null);
+            EinkaufLöschenSpalte.AspectToStringConverter = (a => (a == null || !((Abrechnung)a).Gebucht) ? "Löschen" : null);
             PositionLöschenSpalte.AspectToStringConverter = (e => "Löschen");
             KontoSpalte.AspectToStringConverter = (ü => ((Überweisung)ü).Konto.Name);
             ProduktSpalte.AspectToStringConverter = (p => ((Produkt)p).Name);
@@ -47,6 +50,8 @@ namespace Getränkeabrechnung.Ansicht
             positionssteuerung.EinkaufspositionHinzugefügt += NeuePosition;
             positionssteuerung.EinkaufspositionVerändert += PositionVerändert;
             positionssteuerung.EinkaufspositionGelöscht += PositionGelöscht;
+
+            abrechnungssteuerung.AbrechnungVerändert += Abrechnungssteuerung_AbrechnungVerändert;
             Fülle();
         }
 
@@ -66,7 +71,7 @@ namespace Getränkeabrechnung.Ansicht
         {
             if (einkauf == null)
             {
-                Einkäufeliste.SetObjects(einkaufsteuerung.Einkäufe);
+                Einkäufeliste.SetObjects(einkaufsteuerung.Einkäufe.ToList());
                 Einkäufeliste.Sort(DatumSpalte, SortOrder.Descending);
             }
             else
@@ -76,13 +81,24 @@ namespace Getränkeabrechnung.Ansicht
         private void FüllePositionen()
         {
             if (Einkauf == null)
+            {
                 Positionenliste.ClearObjects();
+                Positionenliste.Enabled = false;
+            }
+            else
+            {
+                Positionenliste.Enabled = einkaufsteuerung.IstLöschbar(Einkauf);
+                PositionLöschenSpalte.IsVisible = Positionenliste.Enabled;
+                NeuePositonPanel.Enabled = Positionenliste.Enabled;
+                Positionenliste.RebuildColumns();
+                Positionenliste.SetObjects(Einkauf.Positionen.ToList());
+                Positionenliste.Sort(ProduktSpalte);
+            }
+        }
 
-            Positionenliste.Enabled = einkaufsteuerung.IstLöschbar(Einkauf);
-            PositionLöschenSpalte.IsVisible = einkaufsteuerung.IstLöschbar(Einkauf);
-            Positionenliste.RebuildColumns();
-            Positionenliste.SetObjects(Einkauf.Positionen);
-            Positionenliste.Sort(ProduktSpalte);
+        private void Abrechnungssteuerung_AbrechnungVerändert(Abrechnung abrechnung)
+        {
+            Einkäufeliste.RefreshObjects(abrechnung.Einkäufe);
         }
 
         private void PositionVerändert(Einkaufsposition position)
@@ -159,6 +175,9 @@ namespace Getränkeabrechnung.Ansicht
 
         private void NeuePositionKnopf_Click(object sender, EventArgs e)
         {
+            if (Einkauf == null)
+                return;
+
             int anzahl = (int)AnzahlBox.Value;
 
             var position = new Einkaufsposition

@@ -39,9 +39,9 @@ namespace Getränkeabrechnung.Ansicht
         {
             if (benutzer == null)
             {
-                AktivListe.SetObjects(benutzersteuerung.Benutzer);
+                AktivListe.SetObjects(benutzersteuerung.Benutzer.ToList());
                 AktivListe.Sort(ZimmerAktiv, SortOrder.Ascending);
-                InaktivListe.SetObjects(benutzersteuerung.Benutzer);
+                InaktivListe.SetObjects(benutzersteuerung.Benutzer.ToList());
                 InaktivListe.Sort(ZimmerInaktiv, SortOrder.Ascending);
             } else
             {
@@ -78,12 +78,12 @@ namespace Getränkeabrechnung.Ansicht
 
         private void AktivierenKnopf_Click(object sender, EventArgs e)
         {
-            benutzersteuerung.SetzeAktiv(InaktivListe.SelectedObjects.Cast<Benutzer>(), true);
+            benutzersteuerung.SetzeAktiv(InaktivListe.SelectedObjects.Cast<Benutzer>().ToList(), true);
         }
 
         private void DeaktivierenKnopf_Click(object sender, EventArgs e)
         {
-            benutzersteuerung.SetzeAktiv(AktivListe.SelectedObjects.Cast<Benutzer>(), false);
+            benutzersteuerung.SetzeAktiv(AktivListe.SelectedObjects.Cast<Benutzer>().ToList(), false);
         }
 
         private void HinzufügenKnopf_Click(object sender, EventArgs e)
@@ -109,6 +109,16 @@ namespace Getränkeabrechnung.Ansicht
         {
             var benutzer = (Benutzer)e.RowObject;
             benutzersteuerung.BearbeiteBenutzer(benutzer);
+        }
+
+        private void AnzeigenOptionAktiv_Click(object sender, EventArgs e)
+        {
+            Hauptfenster.ÖffneBenutzerfenster((Benutzer)AktivListe.SelectedObject);
+        }
+
+        private void AnzeigenOptionInaktiv_Click(object sender, EventArgs e)
+        {
+            Hauptfenster.ÖffneBenutzerfenster((Benutzer)InaktivListe.SelectedObject);
         }
     }
 }

@@ -50,7 +50,7 @@ namespace Getränkeabrechnung
                     Name = title,
                     Startzeitpunkt = datestart,
                     Endzeitpunkt = datestop,
-                    Abgerechnet = billed,
+                    Gebucht = billed,
                     Schritt = step
                 };
                 abrechnungen[id] = abrechnung;
@@ -86,7 +86,7 @@ namespace Getränkeabrechnung
                     Einkaufspreis = purchaseprice,
                     // Aktiv = active,
                     Kastengröße = cratesize,
-                    // ListenPosition = position,
+                    Listenposition = position,
                     // Pfand = deposit,
                     Preis = price,
                     Versteckt = hidden || !active
@@ -334,7 +334,7 @@ namespace Getränkeabrechnung
                 string user_id = result["drinkaccounting_user"] as string;
 
                 abrechnungen[statement_id].Benutzer.Add(benutzer[user_id]);
-                benutzer[user_id].Abrechnungen.Add(abrechnungen[statement_id]);
+                // benutzer[user_id].Abrechnungen.Add(abrechnungen[statement_id]);
             }
 
             connection.Close();

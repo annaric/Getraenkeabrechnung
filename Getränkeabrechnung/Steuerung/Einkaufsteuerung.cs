@@ -20,7 +20,7 @@ namespace Getränkeabrechnung.Steuerung
 
         public IEnumerable<Einkauf> Einkäufe => Kontext.Einkäufe.AsEnumerable();
 
-        public bool IstLöschbar(Einkauf einkauf) => einkauf.Abrechnung == null || !einkauf.Abrechnung.Abgerechnet;
+        public bool IstLöschbar(Einkauf einkauf) => einkauf.Abrechnung == null || !einkauf.Abrechnung.Gebucht;
 
         public void BearbeiteEinkauf(Einkauf einkauf)
         {
@@ -47,12 +47,21 @@ namespace Getränkeabrechnung.Steuerung
             if (!IstLöschbar(einkauf))
                 throw new InvalidOperationException("Dieser Einkauf ist nicht löschbar, er ist Teil einer schon abgerechneten Abrechnung.");
 
-            if (einkauf.Abrechnung != null)
-                einkauf.Abrechnung.Einkäufe.Remove(einkauf);
+            using (var transaktion = Kontext.Database.BeginOrReuseTransaction())
+            {
+                if (einkauf.Abrechnung != null)
+                    Abrechnungssteuerung.Entferne(einkauf.Abrechnung, einkauf);
 
-            var überweisung = einkauf.Überweisung;
-            Kontext.Einkäufe.Remove(einkauf); // Nebeneffekt: Überweisung ist null
-            Überweisungssteuerung.StorniereÜberweisung(überweisung, erzwinge: true);
+                Einkaufspositionssteuerung.LöschePositionen(einkauf.Positionen, erzwinge: true);
+
+                var überweisung = einkauf.Überweisung;
+                Überweisungssteuerung.StorniereÜberweisung(überweisung, erzwinge: true);
+                einkauf.Überweisung = null;
+
+                Kontext.Einkäufe.Remove(einkauf);
+                Kontext.SaveChanges();
+                transaktion?.Commit();
+            }
             EinkaufGelöscht?.Invoke(einkauf);
         }
     }

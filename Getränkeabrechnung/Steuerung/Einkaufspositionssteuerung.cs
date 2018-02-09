@@ -25,18 +25,32 @@ namespace Getränkeabrechnung.Steuerung
 
             position.Einkauf = einkauf;
             einkauf.Positionen.Add(position);
+            if (einkauf.Abrechnung != null && !einkauf.Abrechnung.Produkte.Contains(position.Produkt))
+                Abrechnungssteuerung.FügeHinzu(einkauf.Abrechnung, position.Produkt);
+
             Kontext.SaveChanges();
             EinkaufspositionHinzugefügt?.Invoke(position);
         }
 
-        public void LöschePosition(Einkaufsposition position)
+        public void LöschePosition(Einkaufsposition position, bool erzwinge = false)
         {
-            if (!Einkaufsteuerung.IstLöschbar(position.Einkauf))
+            if (!erzwinge && !Einkaufsteuerung.IstLöschbar(position.Einkauf))
                 throw new InvalidOperationException("Aus diesem Einkauf kann keine Position mehr gelöscht werden.");
 
             Kontext.Einkaufspositionen.Remove(position); // Nebeneffekt: Wird aus Einkauf gelöscht
             Kontext.SaveChanges();
             EinkaufspositionGelöscht?.Invoke(position);
+        }
+
+        public void LöschePositionen(ICollection<Einkaufsposition> positionen, bool erzwinge = false)
+        {
+            if (!erzwinge && positionen.Any(p => !Einkaufsteuerung.IstLöschbar(p.Einkauf)))
+                throw new InvalidOperationException("Aus diesem Einkauf kann keine Position mehr gelöscht werden.");
+
+            Kontext.Einkaufspositionen.RemoveRange(positionen);
+            Kontext.SaveChanges();
+            foreach (var position in positionen)
+                EinkaufspositionGelöscht?.Invoke(position);
         }
 
         public void BearbeitePosition(Einkaufsposition position)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,9 @@ namespace Getränkeabrechnung.Modell
     public class Einkaufsposition
     {
         public int Id { get; set; }
+        [Required]
         public virtual Einkauf Einkauf { get; set; }
+        [Required]
         public virtual Produkt Produkt { get; set; }
         public int AnzahlKästen { get; set; }
     }

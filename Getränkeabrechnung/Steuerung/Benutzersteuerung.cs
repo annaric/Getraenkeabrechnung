@@ -47,7 +47,7 @@ namespace Getränkeabrechnung.Steuerung
             BearbeiteBenutzer(benutzer);
         }
 
-        public void SetzeAktiv(IEnumerable<Benutzer> benutzer, bool aktiv)
+        public void SetzeAktiv(ICollection<Benutzer> benutzer, bool aktiv)
         {
             foreach (var b in benutzer)
             {

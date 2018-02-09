@@ -21,7 +21,7 @@ namespace Getränkeabrechnung.Steuerung
 
         public bool KannBearbeitetWerden(Produkt produkt)
         {
-            return !BenutzteProdukte.Distinct().ToList().Contains(produkt);
+            return !BenutzteProdukte.Any(p => p.Id == produkt.Id);
         }
 
         public IEnumerable<Produkt> BenutzteProdukte
@@ -29,18 +29,16 @@ namespace Getränkeabrechnung.Steuerung
             get
             {
                 return Kontext.Einkaufspositionen
-                    .Where(p => p.Einkauf.Abrechnung == null || !p.Einkauf.Abrechnung.Abgerechnet)
-                    .Select(p => p.Produkt);
+                    .Where(p => p.Einkauf.Abrechnung == null || !p.Einkauf.Abrechnung.Gebucht)
+                    .Select(p => p.Produkt).Distinct();
             }
         }
 
-        private bool KannMitKlonenBearbeitetWerden(Produkt produkt) => !produkt.Abrechnungen.Any(a => a.Abgerechnet);
+        private bool KannMitKlonenBearbeitetWerden(Produkt produkt) => !produkt.Abrechnungen.Any(a => a.Gebucht);
 
         public Produkt BearbeitbaresProdukt(Produkt produkt)
         {
-            var sdkfjlskdjf = Produkte.Select(p => p.Abrechnungen.Count).ToArray();
-
-            // Wenn das Produkt nicht Teil einer schon abregerechneten Abrechnung ist, kann es bearbeitet werden.
+            // Wenn das Produkt nicht Teil einer schon gebuchten Abrechnung ist, kann es bearbeitet werden.
             if (KannMitKlonenBearbeitetWerden(produkt))
                 return produkt;
             else

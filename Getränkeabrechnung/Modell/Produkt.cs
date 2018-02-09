@@ -20,7 +20,7 @@ namespace Getränkeabrechnung.Modell
         public bool Versteckt { get; set; }
         public virtual List<Abrechnung> Abrechnungen { get; set; }
         public virtual Produkt Elternprodukt { get; set; }
-        // public int ListenPosition { get; set; }
+        public int Listenposition { get; set; }
 
         public Produkt()
         {

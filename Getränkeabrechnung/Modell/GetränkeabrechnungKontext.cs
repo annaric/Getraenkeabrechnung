@@ -49,7 +49,7 @@ namespace Getränkeabrechnung.Modell
                 });
             modelBuilder.Entity<Abrechnung>()
                 .HasMany(s => s.Benutzer)
-                .WithMany(b => b.Abrechnungen)
+                .WithMany()
                 .Map(m =>
                 {
                     m.MapLeftKey("Abrechnung_Id");

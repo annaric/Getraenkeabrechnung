@@ -39,6 +39,7 @@
             this.PreisSpalte = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.VerstecktSpalte = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.ToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.PositionSpalte = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             stornoKnopfRenderer1 = new Getränkeabrechnung.Ansicht.StornoKnopfRenderer();
             contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             contextMenuStrip1.SuspendLayout();
@@ -69,6 +70,7 @@
             this.ProduktListe.AllColumns.Add(this.KastengrößeSpalte);
             this.ProduktListe.AllColumns.Add(this.EinkaufspreisSpalte);
             this.ProduktListe.AllColumns.Add(this.PreisSpalte);
+            this.ProduktListe.AllColumns.Add(this.PositionSpalte);
             this.ProduktListe.AllColumns.Add(this.VerstecktSpalte);
             this.ProduktListe.AlternateRowBackColor = System.Drawing.SystemColors.ButtonFace;
             this.ProduktListe.CellEditActivation = BrightIdeasSoftware.ObjectListView.CellEditActivateMode.DoubleClick;
@@ -78,6 +80,7 @@
             this.KastengrößeSpalte,
             this.EinkaufspreisSpalte,
             this.PreisSpalte,
+            this.PositionSpalte,
             this.VerstecktSpalte});
             this.ProduktListe.ContextMenuStrip = contextMenuStrip1;
             this.ProduktListe.Cursor = System.Windows.Forms.Cursors.Default;
@@ -154,6 +157,12 @@
             this.ToolTip.UseAnimation = false;
             this.ToolTip.UseFading = false;
             // 
+            // PositionSpalte
+            // 
+            this.PositionSpalte.AspectName = "Listenposition";
+            this.PositionSpalte.Text = "Listenposition";
+            this.PositionSpalte.Width = 40;
+            // 
             // Produktfenster
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -180,5 +189,6 @@
         private BrightIdeasSoftware.OLVColumn VerstecktSpalte;
         private System.Windows.Forms.ToolStripMenuItem NeuesProduktKnopf;
         private System.Windows.Forms.ToolTip ToolTip;
+        private BrightIdeasSoftware.OLVColumn PositionSpalte;
     }
 }

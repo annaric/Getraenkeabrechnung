@@ -23,13 +23,13 @@ namespace Getränkeabrechnung.Ansicht
 
         public static String AbrechnungZustandZuString(object cellValue)
         {
-            return ((bool)cellValue) ? "Abgerechnet" : "Nicht Abgerechnet";
+            return ((bool)cellValue) ? "Gebucht" : "Nicht Gebucht";
         }
 
         public static void AbrechnungFormatieren(BrightIdeasSoftware.FormatCellEventArgs e)
         {
             var abrechnung = (Abrechnung)e.Model;
-            if (abrechnung.Abgerechnet)
+            if (abrechnung.Gebucht)
             {
                 e.SubItem.ForeColor = Color.Green;
             } else

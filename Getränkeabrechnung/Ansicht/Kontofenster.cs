@@ -79,7 +79,7 @@ namespace Getränkeabrechnung.Ansicht
 
             if (überweisung == null)
             {
-                Überweisungsliste.SetObjects(konto.Überweisungen);
+                Überweisungsliste.SetObjects(konto.Überweisungen.ToList());
                 Überweisungsliste.Sort(ErstellungSpalte, SortOrder.Ascending);
                 Überweisungsliste.TopItemIndex = Überweisungsliste.Items.Count - 1;
             }

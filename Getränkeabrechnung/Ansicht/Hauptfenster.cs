@@ -1,4 +1,5 @@
 ﻿using BrightIdeasSoftware;
+using Getränkeabrechnung.Ansicht.AbrechnungsWizard;
 using Getränkeabrechnung.Modell;
 using Getränkeabrechnung.Steuerung;
 using System;
@@ -12,7 +13,7 @@ using System.Windows.Forms;
 
 namespace Getränkeabrechnung.Ansicht
 {
-    partial class Hauptfenster : Getränkeabrechnung.Ansicht.GetränkeabrechnungFenster
+    public partial class Hauptfenster : GetränkeabrechnungFenster
     {
         public Datenbanksteuerung Steuerung { get; private set; }
         private Kontosteuerung kontosteuerung;
@@ -24,8 +25,9 @@ namespace Getränkeabrechnung.Ansicht
         private BenutzerListefenster _benutzerListefenster;
         private Produktfenster _produktfenster;
         private Einkäufefenster _einkäufefenster;
+        private Abrechnungsfenster _abrechnungsfenster;
 
-        public Benutzerfenster Benutzerfenster
+        Benutzerfenster Benutzerfenster
         {
             get
             {
@@ -35,7 +37,7 @@ namespace Getränkeabrechnung.Ansicht
             }
         }
 
-        public Kontofenster Kontofenster
+        Kontofenster Kontofenster
         {
             get
             {
@@ -45,7 +47,7 @@ namespace Getränkeabrechnung.Ansicht
             }
         }
 
-        public BenutzerListefenster BenutzerListefenster
+        BenutzerListefenster BenutzerListefenster
         {
             get
             {
@@ -55,7 +57,7 @@ namespace Getränkeabrechnung.Ansicht
             }
         }
 
-        public Produktfenster Produktfenster
+        Produktfenster Produktfenster
         {
             get
             {
@@ -65,13 +67,23 @@ namespace Getränkeabrechnung.Ansicht
             }
         }
 
-        public Einkäufefenster Einkäufefenster
+        Einkäufefenster Einkäufefenster
         {
             get
             {
                 if (_einkäufefenster == null || _einkäufefenster.IsDisposed)
                     _einkäufefenster = new Einkäufefenster(this);
                 return _einkäufefenster;
+            }
+        }
+
+        Abrechnungsfenster Abrechnungsfenster
+        {
+            get
+            {
+                if (_abrechnungsfenster == null || _abrechnungsfenster.IsDisposed)
+                    _abrechnungsfenster = new Abrechnungsfenster(this);
+                return _abrechnungsfenster;
             }
         }
 
@@ -95,8 +107,12 @@ namespace Getränkeabrechnung.Ansicht
             ÖffneDatenbank(letzteDatenbank);
 
             kontosteuerung.KontoVerändert += FülleKonten;
+            abrechnungssteuerung.AbrechnungHinzugefügt += Abrechnungssteuerung_AbrechnungenVerändert;
             abrechnungssteuerung.AbrechnungVerändert += FülleAbrechnungen;
+            abrechnungssteuerung.AbrechnungGebucht += FülleAbrechnungen;
+            abrechnungssteuerung.AbrechnungGelöscht += Abrechnungssteuerung_AbrechnungenVerändert;
             benutzersteuerung.BenutzerVerändert += FülleBenutzer;
+            benutzersteuerung.BenutzerHinzugefügt += Benutzersteuerung_BenutzerHinzugefügt;
         }
 
         private void ÖffneDatenbank(string dateiname)
@@ -122,7 +138,7 @@ namespace Getränkeabrechnung.Ansicht
         private void FülleKonten(Konto konto = null)
         {
             if (konto == null)
-                Kontenliste.SetObjects(kontosteuerung.Konten);
+                Kontenliste.SetObjects(kontosteuerung.Konten.ToList());
             else
                 Kontenliste.RefreshObject(konto);
         }
@@ -131,7 +147,7 @@ namespace Getränkeabrechnung.Ansicht
         {
             if (benutzer == null)
             {
-                Benutzerliste.SetObjects(benutzersteuerung.Benutzer);
+                Benutzerliste.SetObjects(benutzersteuerung.Benutzer.ToList());
                 Benutzerliste.Sort(GuthabenSpalte, SortOrder.Ascending);
                 GuthabenSpalte.AutoResize(ColumnHeaderAutoResizeStyle.HeaderSize);
             }
@@ -142,15 +158,27 @@ namespace Getränkeabrechnung.Ansicht
         private void FülleAbrechnungen(Abrechnung abrechnung = null)
         {
             if (abrechnung == null)
-                Abrechnungsliste.SetObjects(abrechnungssteuerung.Abrechnungen.OrderByDescending(x => x.Startzeitpunkt).Take(5));
+                Abrechnungsliste.SetObjects(abrechnungssteuerung.Abrechnungen.OrderByDescending(x => x.Startzeitpunkt).Take(8).ToList());
             else
                 Abrechnungsliste.RefreshObject(abrechnung);
             StatusSpalte.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
+
+            NeueAbrechnungKnopf.Enabled = !abrechnungssteuerung.Abrechnungen.Any(a => !a.Gebucht);
+        }
+
+        private void Benutzersteuerung_BenutzerHinzugefügt(Benutzer benutzer)
+        {
+            Benutzerliste.AddObject(benutzer);
+        }
+
+        private void Abrechnungssteuerung_AbrechnungenVerändert(Abrechnung abrechnung)
+        {
+            FülleAbrechnungen();
         }
 
         private void Hauptfenster_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // Andere Fenster schließen
+            // Andere Fenster schließen?
             Steuerung.Schließe();
         }
 
@@ -205,6 +233,50 @@ namespace Getränkeabrechnung.Ansicht
         {
             Einkäufefenster.Show();
             Einkäufefenster.Focus();
+        }
+
+        private void NeueAbrechnungKnopf_Click(object sender, EventArgs e)
+        {
+            var letzteGebuchte = abrechnungssteuerung.Abrechnungen.Where(a => a.Gebucht).OrderByDescending(a => a.Endzeitpunkt).FirstOrDefault();
+
+            var jetzt = DateTime.Now;
+
+            var abrechnung = new Abrechnung
+            {
+                Startzeitpunkt = letzteGebuchte?.Endzeitpunkt ?? jetzt,
+                Endzeitpunkt = jetzt,
+                Name = "Abrechnung " + jetzt.ToString("MMMM"),
+            };
+            abrechnung.AusgangsBestandAbrechnung = abrechnungssteuerung.AusgangsBestandAbrechnungen(abrechnung).OrderByDescending(a => a.Endzeitpunkt).FirstOrDefault();
+            abrechnung.Benutzer.AddRange(abrechnungssteuerung.Benutzersteuerung.Benutzer.Where(b => b.Aktiv));
+
+            abrechnungssteuerung.NeueAbrechnung(abrechnung);
+
+            Abrechnungsfenster.Abrechnung = abrechnung;
+            Abrechnungsfenster.Show();
+            Abrechnungsfenster.Focus();
+        }
+
+        private void Abrechnungsliste_ItemActivate(object sender, EventArgs e)
+        {
+            var abrechnung = (Abrechnung)Abrechnungsliste.SelectedObject;
+
+            if (!abrechnung.Gebucht)
+            {
+                Abrechnungsfenster.Abrechnung = abrechnung;
+                Abrechnungsfenster.Show();
+                Abrechnungsfenster.Focus();
+            } else
+            {
+                // TODO
+            }
+        }
+
+        public void ÖffneBenutzerfenster(Benutzer benutzer)
+        {
+            Benutzerfenster.Benutzer = benutzer;
+            Benutzerfenster.Show();
+            Benutzerfenster.Focus();
         }
     }
 }

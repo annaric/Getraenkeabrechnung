@@ -11,7 +11,7 @@ namespace Getränkeabrechnung.Modell
     public class Benutzer
     {
         public int Id { get; set; }
-        public virtual List<Abrechnung> Abrechnungen { get; set; }
+        // public virtual List<Abrechnung> Abrechnungen { get; set; }
         public string Vorname { get; set; }
         public string Nachname { get; set; }
         public int Zimmernummer { get; set; }
@@ -23,7 +23,7 @@ namespace Getränkeabrechnung.Modell
 
         [NotMapped]
         public string Anzeigename { get {
-                var name = Rufname.Equals("") ? Vorname : Rufname;
+                var name = Rufname == null || Rufname.Equals("") ? Vorname : Rufname;
                 if (Kaution == 0)
                 {
                     name += "*";
@@ -34,7 +34,7 @@ namespace Getränkeabrechnung.Modell
         public Benutzer()
         {
             Zahlungen = new List<Zahlung>();
-            Abrechnungen = new List<Abrechnung>();
+            // Abrechnungen = new List<Abrechnung>();
         }
 
         public void Buche(Zahlung zahlung)

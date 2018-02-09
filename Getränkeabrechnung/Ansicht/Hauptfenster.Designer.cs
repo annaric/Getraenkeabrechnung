@@ -47,6 +47,7 @@
             this.BenutzerKnopf = new System.Windows.Forms.Button();
             this.ProduktKnopf = new System.Windows.Forms.Button();
             this.EinkäufeKnopf = new System.Windows.Forms.Button();
+            this.NeueAbrechnungKnopf = new System.Windows.Forms.Button();
             tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             Benutzerspalte = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             label1 = new System.Windows.Forms.Label();
@@ -245,6 +246,7 @@
             this.Abrechnungsliste.UseCompatibleStateImageBehavior = false;
             this.Abrechnungsliste.View = System.Windows.Forms.View.Details;
             this.Abrechnungsliste.FormatCell += new System.EventHandler<BrightIdeasSoftware.FormatCellEventArgs>(this.Abrechnungsliste_FormatCell);
+            this.Abrechnungsliste.ItemActivate += new System.EventHandler(this.Abrechnungsliste_ItemActivate);
             // 
             // AbrechnungSpalte
             // 
@@ -254,7 +256,7 @@
             // 
             // StatusSpalte
             // 
-            this.StatusSpalte.AspectName = "Abgerechnet";
+            this.StatusSpalte.AspectName = "Gebucht";
             this.StatusSpalte.Text = "Status";
             this.StatusSpalte.Width = 120;
             // 
@@ -265,6 +267,7 @@
             tableLayoutPanel3.Controls.Add(this.BenutzerKnopf, 0, 0);
             tableLayoutPanel3.Controls.Add(this.ProduktKnopf, 0, 1);
             tableLayoutPanel3.Controls.Add(this.EinkäufeKnopf, 0, 2);
+            tableLayoutPanel3.Controls.Add(this.NeueAbrechnungKnopf, 0, 3);
             tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
             tableLayoutPanel3.Location = new System.Drawing.Point(0, 195);
             tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
@@ -314,6 +317,18 @@
             this.EinkäufeKnopf.UseVisualStyleBackColor = true;
             this.EinkäufeKnopf.Click += new System.EventHandler(this.EinkäufeKnopf_Click);
             // 
+            // NeueAbrechnungKnopf
+            // 
+            this.NeueAbrechnungKnopf.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.NeueAbrechnungKnopf.Location = new System.Drawing.Point(10, 123);
+            this.NeueAbrechnungKnopf.Margin = new System.Windows.Forms.Padding(10, 3, 10, 3);
+            this.NeueAbrechnungKnopf.Name = "NeueAbrechnungKnopf";
+            this.NeueAbrechnungKnopf.Size = new System.Drawing.Size(222, 34);
+            this.NeueAbrechnungKnopf.TabIndex = 3;
+            this.NeueAbrechnungKnopf.Text = "Neue Abrechnung...";
+            this.NeueAbrechnungKnopf.UseVisualStyleBackColor = true;
+            this.NeueAbrechnungKnopf.Click += new System.EventHandler(this.NeueAbrechnungKnopf_Click);
+            // 
             // Hauptfenster
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -345,5 +360,6 @@
         private System.Windows.Forms.Button BenutzerKnopf;
         private System.Windows.Forms.Button ProduktKnopf;
         private System.Windows.Forms.Button EinkäufeKnopf;
+        private System.Windows.Forms.Button NeueAbrechnungKnopf;
     }
 }

@@ -71,6 +71,36 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ansicht\AbrechnungsWizard\Abrechnungsfenster.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ansicht\AbrechnungsWizard\Abrechnungsfenster.Designer.cs">
+      <DependentUpon>Abrechnungsfenster.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ansicht\AbrechnungsWizard\AbrechnungsWizardAnsicht.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ansicht\AbrechnungsWizard\AbrechnungsWizardAnsicht.Designer.cs">
+      <DependentUpon>AbrechnungsWizardAnsicht.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ansicht\AbrechnungsWizard\Bestandteileansicht.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ansicht\AbrechnungsWizard\Bestandteileansicht.Designer.cs">
+      <DependentUpon>Bestandteileansicht.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ansicht\AbrechnungsWizard\Konfigurationsansicht.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ansicht\AbrechnungsWizard\Konfigurationsansicht.Designer.cs">
+      <DependentUpon>Konfigurationsansicht.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ansicht\AbrechnungsWizard\Verbrauchansicht.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ansicht\AbrechnungsWizard\Verbrauchansicht.Designer.cs">
+      <DependentUpon>Verbrauchansicht.cs</DependentUpon>
+    </Compile>
     <Compile Include="Ansicht\Benutzerfenster.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -140,6 +170,7 @@
     <Compile Include="Modell\Bestand.cs" />
     <Compile Include="Modell\Einkauf.cs" />
     <Compile Include="Modell\Einkaufsposition.cs" />
+    <Compile Include="Modell\Erweiterungen.cs" />
     <Compile Include="Modell\GetränkeabrechnungKontext.cs" />
     <Compile Include="Modell\Konto.cs" />
     <Compile Include="Modell\Produkt.cs" />
@@ -160,12 +191,14 @@
     </Compile>
     <Compile Include="Steuerung\Abrechnungssteuerung.cs" />
     <Compile Include="Steuerung\Benutzersteuerung.cs" />
+    <Compile Include="Steuerung\Bestandsteuerung.cs" />
     <Compile Include="Steuerung\Datenbanksteuerung.cs" />
     <Compile Include="Steuerung\Einkaufspositionssteuerung.cs" />
     <Compile Include="Steuerung\Einkaufsteuerung.cs" />
     <Compile Include="Steuerung\Kontosteuerung.cs" />
     <Compile Include="Steuerung\Produktsteuerung.cs" />
     <Compile Include="Steuerung\Steuerung.cs" />
+    <Compile Include="Steuerung\Verbrauchsteuerung.cs" />
     <Compile Include="Steuerung\Zahlungssteuerung.cs" />
     <Compile Include="Steuerung\Überweisungssteuerung.cs" />
   </ItemGroup>
@@ -180,6 +213,18 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Ansicht\AbrechnungsWizard\Abrechnungsfenster.resx">
+      <DependentUpon>Abrechnungsfenster.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ansicht\AbrechnungsWizard\Bestandteileansicht.resx">
+      <DependentUpon>Bestandteileansicht.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ansicht\AbrechnungsWizard\Konfigurationsansicht.resx">
+      <DependentUpon>Konfigurationsansicht.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ansicht\AbrechnungsWizard\Verbrauchansicht.resx">
+      <DependentUpon>Verbrauchansicht.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ansicht\Benutzerfenster.resx">
       <DependentUpon>Benutzerfenster.cs</DependentUpon>
     </EmbeddedResource>

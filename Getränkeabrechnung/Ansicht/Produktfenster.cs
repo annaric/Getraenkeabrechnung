@@ -46,7 +46,7 @@ namespace Getränkeabrechnung.Ansicht
             if (produkt == null)
             {
                 benutzteProdukte = new HashSet<Produkt>(produktsteuerung.BenutzteProdukte);
-                ProduktListe.SetObjects(produktsteuerung.Produkte);
+                ProduktListe.SetObjects(produktsteuerung.Produkte.ToList());
                 ProduktListe.Sort(NameSpalte, SortOrder.Ascending);
             } else
             {

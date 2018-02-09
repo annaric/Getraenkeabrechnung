@@ -72,7 +72,7 @@ namespace Getränkeabrechnung.Ansicht
 
             if (zahlung == null)
             {
-                Zahlungsliste.SetObjects(benutzer.Zahlungen);
+                Zahlungsliste.SetObjects(benutzer.Zahlungen.ToList());
                 Zahlungsliste.Sort(DatumSpalte, SortOrder.Ascending);
                 Zahlungsliste.TopItemIndex = Zahlungsliste.Items.Count - 1;
             }

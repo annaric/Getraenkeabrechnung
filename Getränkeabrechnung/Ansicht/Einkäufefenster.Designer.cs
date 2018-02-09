@@ -31,7 +31,6 @@
             System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
             Getränkeabrechnung.Ansicht.StornoKnopfRenderer stornoKnopfRenderer1;
             System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-            System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
             this.Einkäufeliste = new BrightIdeasSoftware.ObjectListView();
             this.Rechnungsnummerspalte = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.DatumSpalte = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -48,18 +47,18 @@
             this.NeuerEinkaufKnopf = new System.Windows.Forms.Button();
             this.BetragBox = new Getränkeabrechnung.Ansicht.BetragBox();
             this.KontoBox = new Getränkeabrechnung.Ansicht.KontoBox();
+            this.NeuePositonPanel = new System.Windows.Forms.TableLayoutPanel();
             this.AnzahlBox = new System.Windows.Forms.NumericUpDown();
             this.NeuePositionKnopf = new System.Windows.Forms.Button();
             this.ProduktBox = new Getränkeabrechnung.Ansicht.ProduktBox();
             tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             stornoKnopfRenderer1 = new Getränkeabrechnung.Ansicht.StornoKnopfRenderer();
             tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Einkäufeliste)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Positionenliste)).BeginInit();
             tableLayoutPanel2.SuspendLayout();
-            tableLayoutPanel3.SuspendLayout();
+            this.NeuePositonPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AnzahlBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -71,7 +70,7 @@
             tableLayoutPanel1.Controls.Add(this.Einkäufeliste, 0, 0);
             tableLayoutPanel1.Controls.Add(this.Positionenliste, 1, 0);
             tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 0, 1);
-            tableLayoutPanel1.Controls.Add(tableLayoutPanel3, 1, 1);
+            tableLayoutPanel1.Controls.Add(this.NeuePositonPanel, 1, 1);
             tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -183,6 +182,7 @@
             this.PositionLöschenSpalte});
             this.Positionenliste.Cursor = System.Windows.Forms.Cursors.Default;
             this.Positionenliste.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Positionenliste.Enabled = false;
             this.Positionenliste.FullRowSelect = true;
             this.Positionenliste.Location = new System.Drawing.Point(549, 10);
             this.Positionenliste.Name = "Positionenliste";
@@ -219,12 +219,13 @@
             // 
             // tableLayoutPanel2
             // 
-            tableLayoutPanel2.ColumnCount = 5;
+            tableLayoutPanel2.ColumnCount = 6;
             tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
             tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
-            tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
             tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 65F));
+            tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
             tableLayoutPanel2.Controls.Add(this.RechnungsnummberBox, 0, 0);
             tableLayoutPanel2.Controls.Add(this.DatumBox, 1, 0);
             tableLayoutPanel2.Controls.Add(this.NeuerEinkaufKnopf, 4, 0);
@@ -244,14 +245,14 @@
             this.RechnungsnummberBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.RechnungsnummberBox.Location = new System.Drawing.Point(3, 3);
             this.RechnungsnummberBox.Name = "RechnungsnummberBox";
-            this.RechnungsnummberBox.Size = new System.Drawing.Size(191, 20);
+            this.RechnungsnummberBox.Size = new System.Drawing.Size(91, 20);
             this.RechnungsnummberBox.TabIndex = 0;
             // 
             // DatumBox
             // 
             this.DatumBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.DatumBox.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.DatumBox.Location = new System.Drawing.Point(200, 3);
+            this.DatumBox.Location = new System.Drawing.Point(100, 3);
             this.DatumBox.Name = "DatumBox";
             this.DatumBox.Size = new System.Drawing.Size(74, 20);
             this.DatumBox.TabIndex = 1;
@@ -259,7 +260,7 @@
             // NeuerEinkaufKnopf
             // 
             this.NeuerEinkaufKnopf.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.NeuerEinkaufKnopf.Location = new System.Drawing.Point(460, 0);
+            this.NeuerEinkaufKnopf.Location = new System.Drawing.Point(340, 0);
             this.NeuerEinkaufKnopf.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.NeuerEinkaufKnopf.Name = "NeuerEinkaufKnopf";
             this.NeuerEinkaufKnopf.Size = new System.Drawing.Size(59, 26);
@@ -271,10 +272,12 @@
             // BetragBox
             // 
             this.BetragBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.BetragBox.Location = new System.Drawing.Point(280, 3);
+            this.BetragBox.Location = new System.Drawing.Point(180, 3);
             this.BetragBox.Name = "BetragBox";
             this.BetragBox.Size = new System.Drawing.Size(74, 20);
             this.BetragBox.TabIndex = 4;
+            this.BetragBox.Text = "0,00 €";
+            this.BetragBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // KontoBox
             // 
@@ -283,28 +286,29 @@
             this.KontoBox.Filter = null;
             this.KontoBox.FormattingEnabled = true;
             this.KontoBox.Kontosteuerung = null;
-            this.KontoBox.Location = new System.Drawing.Point(360, 3);
+            this.KontoBox.Location = new System.Drawing.Point(260, 3);
             this.KontoBox.Name = "KontoBox";
-            this.KontoBox.Size = new System.Drawing.Size(94, 21);
+            this.KontoBox.Size = new System.Drawing.Size(74, 21);
             this.KontoBox.TabIndex = 5;
             // 
-            // tableLayoutPanel3
+            // NeuePositonPanel
             // 
-            tableLayoutPanel3.ColumnCount = 3;
-            tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 65F));
-            tableLayoutPanel3.Controls.Add(this.AnzahlBox, 1, 0);
-            tableLayoutPanel3.Controls.Add(this.NeuePositionKnopf, 2, 0);
-            tableLayoutPanel3.Controls.Add(this.ProduktBox, 0, 0);
-            tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            tableLayoutPanel3.Location = new System.Drawing.Point(546, 428);
-            tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
-            tableLayoutPanel3.Name = "tableLayoutPanel3";
-            tableLayoutPanel3.RowCount = 1;
-            tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            tableLayoutPanel3.Size = new System.Drawing.Size(231, 26);
-            tableLayoutPanel3.TabIndex = 3;
+            this.NeuePositonPanel.ColumnCount = 3;
+            this.NeuePositonPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.NeuePositonPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.NeuePositonPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 65F));
+            this.NeuePositonPanel.Controls.Add(this.AnzahlBox, 1, 0);
+            this.NeuePositonPanel.Controls.Add(this.NeuePositionKnopf, 2, 0);
+            this.NeuePositonPanel.Controls.Add(this.ProduktBox, 0, 0);
+            this.NeuePositonPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.NeuePositonPanel.Enabled = false;
+            this.NeuePositonPanel.Location = new System.Drawing.Point(546, 428);
+            this.NeuePositonPanel.Margin = new System.Windows.Forms.Padding(0);
+            this.NeuePositonPanel.Name = "NeuePositonPanel";
+            this.NeuePositonPanel.RowCount = 1;
+            this.NeuePositonPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.NeuePositonPanel.Size = new System.Drawing.Size(231, 26);
+            this.NeuePositonPanel.TabIndex = 3;
             // 
             // AnzahlBox
             // 
@@ -318,6 +322,7 @@
             this.AnzahlBox.Name = "AnzahlBox";
             this.AnzahlBox.Size = new System.Drawing.Size(54, 20);
             this.AnzahlBox.TabIndex = 0;
+            this.AnzahlBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.AnzahlBox.Value = new decimal(new int[] {
             1,
             0,
@@ -363,7 +368,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.Positionenliste)).EndInit();
             tableLayoutPanel2.ResumeLayout(false);
             tableLayoutPanel2.PerformLayout();
-            tableLayoutPanel3.ResumeLayout(false);
+            this.NeuePositonPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.AnzahlBox)).EndInit();
             this.ResumeLayout(false);
 
@@ -390,5 +395,6 @@
         private System.Windows.Forms.NumericUpDown AnzahlBox;
         private System.Windows.Forms.Button NeuePositionKnopf;
         private ProduktBox ProduktBox;
+        private System.Windows.Forms.TableLayoutPanel NeuePositonPanel;
     }
 }

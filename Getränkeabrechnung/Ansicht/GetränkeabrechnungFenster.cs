@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Getränkeabrechnung.Ansicht
 {
-    partial class GetränkeabrechnungFenster : Form
+    public partial class GetränkeabrechnungFenster : Form
     {
         public Hauptfenster Hauptfenster { get; set; }
 
