@@ -7,12 +7,13 @@ using System.Threading.Tasks;
 
 namespace Getränkeabrechnung.Modell
 {
-    [Table("Bestände")]
-    public class Bestand
+    [Table("Verkaufsprodukte")]
+    public class Verkaufsprodukt
     {
         public int Id { get; set; }
-        public virtual Produkt Produkt { get; set; }
-        public int AnzahlFlaschen { get; set; }
         public virtual Abrechnung Abrechnung { get; set; }
+        public virtual Produkt Produkt { get; set; }
+        public int Bestand { get; set; }
+        public double Verkaufspreis { get; set; }
     }
 }

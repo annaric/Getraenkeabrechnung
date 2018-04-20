@@ -25,8 +25,8 @@ namespace Getränkeabrechnung.Steuerung
 
             position.Einkauf = einkauf;
             einkauf.Positionen.Add(position);
-            if (einkauf.Abrechnung != null && !einkauf.Abrechnung.Produkte.Contains(position.Produkt))
-                Abrechnungssteuerung.FügeHinzu(einkauf.Abrechnung, position.Produkt);
+            if (einkauf.Abrechnung != null && !einkauf.Abrechnung.Produkte.Contains(position.Kastengröße.Produkt))
+                Abrechnungssteuerung.FügeHinzu(einkauf.Abrechnung, position.Kastengröße.Produkt);
 
             Kontext.SaveChanges();
             EinkaufspositionHinzugefügt?.Invoke(position);

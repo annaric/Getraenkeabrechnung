@@ -14,7 +14,7 @@ namespace Getränkeabrechnung.Modell
 
         public virtual Abrechnung Abrechnung { get; set; }
         public virtual Benutzer Benutzer { get; set; }
-        public virtual Produkt Produkt { get; set; }
+        public virtual Verkaufsprodukt Verkaufsprodukt { get; set; }
         public int AnzahlFlaschen { get; set; }
     }
 }

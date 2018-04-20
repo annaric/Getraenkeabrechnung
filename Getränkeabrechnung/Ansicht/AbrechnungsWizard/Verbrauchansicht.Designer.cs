@@ -50,10 +50,11 @@
             // 
             // NameSpalte
             // 
+            this.NameSpalte.AspectName = "Titel";
             this.NameSpalte.FillsFreeSpace = true;
             this.NameSpalte.IsEditable = false;
             this.NameSpalte.MinimumWidth = 40;
-            this.NameSpalte.Text = "Benutzer";
+            this.NameSpalte.Text = "Verbrauch";
             // 
             // Verbrauchansicht
             // 

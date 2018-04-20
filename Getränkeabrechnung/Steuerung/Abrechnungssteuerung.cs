@@ -28,6 +28,8 @@ namespace Getränkeabrechnung.Steuerung
                 .Where(a => a.Id != abrechnung.Id);
         }
 
+        public IEnumerable<Produkt> BenötigteProdukte(Abrechnung abrechnung) => abrechnung.Einkäufe.SelectMany(e => e.Positionen).Select(p => p.Kastengröße.Produkt).Distinct();
+
         public void BearbeiteAbrechnung(Abrechnung abrechnung)
         {
             Kontext.SaveChanges();
@@ -56,14 +58,14 @@ namespace Getränkeabrechnung.Steuerung
         public void FügeHinzu(Abrechnung abrechnung, Benutzer benutzer)
         {
             abrechnung.Benutzer.Add(benutzer);
-            Verbrauchsteuerung.NeueVerbrauche(abrechnung, abrechnung.Produkte.Select(p => new Verbrauch() { Benutzer = benutzer, Produkt = p, AnzahlFlaschen = 0 }).ToList());
+            Verbrauchsteuerung.NeueVerbrauche(abrechnung, abrechnung.Verkaufsprodukte.Select(p => new Verbrauch() { Benutzer = benutzer, Verkaufsprodukt = p, AnzahlFlaschen = 0 }).ToList());
             BearbeiteAbrechnung(abrechnung);
         }
 
         public void FügeHinzu(Abrechnung abrechnung, ICollection<Benutzer> benutzer)
         {
             abrechnung.Benutzer.AddRange(benutzer);
-            Verbrauchsteuerung.NeueVerbrauche(abrechnung, abrechnung.Produkte.SelectMany(p => benutzer.Select(b => new Verbrauch() { Benutzer = b, Produkt = p, AnzahlFlaschen = 0 })).ToList());
+            Verbrauchsteuerung.NeueVerbrauche(abrechnung, abrechnung.Verkaufsprodukte.SelectMany(p => benutzer.Select(b => new Verbrauch() { Benutzer = b, Verkaufsprodukt = p, AnzahlFlaschen = 0 })).ToList());
             BearbeiteAbrechnung(abrechnung);
         }
 
@@ -86,11 +88,15 @@ namespace Getränkeabrechnung.Steuerung
 
         public void FügeHinzu(Abrechnung abrechnung, Einkauf einkauf)
         {
-            abrechnung.Einkäufe.Add(einkauf);
-            einkauf.Abrechnung = abrechnung;
-            abrechnung.Produkte.AddRange(einkauf.Positionen.Select(p => p.Produkt).Except(abrechnung.Produkte));
-            BearbeiteAbrechnung(abrechnung);
-            Einkaufsteuerung.BearbeiteEinkauf(einkauf);
+            using (var transaktion = Kontext.Database.BeginOrReuseTransaction())
+            {
+                abrechnung.Einkäufe.Add(einkauf);
+                einkauf.Abrechnung = abrechnung;
+                FügeHinzu(abrechnung, einkauf.Positionen.Select(p => p.Kastengröße.Produkt).Distinct().ToList());
+                BearbeiteAbrechnung(abrechnung);
+                Einkaufsteuerung.BearbeiteEinkauf(einkauf);
+                transaktion?.Commit();
+            }       
         }
 
         public void FügeHinzu(Abrechnung abrechnung, ICollection<Einkauf> einkäufe)
@@ -104,7 +110,7 @@ namespace Getränkeabrechnung.Steuerung
                     einkauf.Abrechnung = abrechnung;
                     Einkaufsteuerung.BearbeiteEinkauf(einkauf);
                 }
-                abrechnung.Produkte.AddRange(einkäufe.SelectMany(e => e.Positionen).Select(p => p.Produkt).Distinct().Except(abrechnung.Produkte));
+                FügeHinzu(abrechnung, einkäufe.SelectMany(e => e.Positionen).Select(p => p.Kastengröße.Produkt).Distinct().ToList());
                 BearbeiteAbrechnung(abrechnung);
 
                 transaktion?.Commit();
@@ -137,67 +143,60 @@ namespace Getränkeabrechnung.Steuerung
 
         public void FügeHinzu(Abrechnung abrechnung, Produkt produkt)
         {
-            abrechnung.Produkte.Add(produkt);
-            produkt.Abrechnungen.Add(abrechnung);
-            Verbrauchsteuerung.NeueVerbrauche(abrechnung, abrechnung.Benutzer.Select(b => new Verbrauch() { Benutzer = b, Produkt = produkt, AnzahlFlaschen = 0 }).ToList());
-            Bestandsteuerung.NeuerBestand(abrechnung, new Bestand() { Produkt = produkt });
+            if (abrechnung.Produkte.Contains(produkt))
+                return;
+
+            var verkaufsprodukt = new Verkaufsprodukt() { Produkt = produkt, Bestand = 0, Verkaufspreis = produkt.AktuellerVerkaufspreis };
+            Verbrauchsteuerung.NeueVerbrauche(abrechnung, abrechnung.Benutzer.Select(b => new Verbrauch() { Benutzer = b, Verkaufsprodukt = verkaufsprodukt, AnzahlFlaschen = 0 }).ToList());
+            Verkaufsproduktsteuerung.NeuesVerkaufsprodukt(abrechnung, verkaufsprodukt);
             BearbeiteAbrechnung(abrechnung);
-            Produktsteuerung.BearbeiteProdukt(produkt);
         }
 
         public void FügeHinzu(Abrechnung abrechnung, ICollection<Produkt> produkte)
         {
+            produkte = produkte.Except(abrechnung.Produkte).ToList();
+            if (produkte.Count == 0)
+                return;
+
             using (var transaktion = Kontext.Database.BeginOrReuseTransaction())
             {
-                abrechnung.Produkte.AddRange(produkte);
+                var verkaufsprodukte = produkte.Select(p => new Verkaufsprodukt() { Produkt = p, Bestand = 0, Verkaufspreis = p.AktuellerVerkaufspreis }).ToList();
+                Verbrauchsteuerung.NeueVerbrauche(abrechnung, verkaufsprodukte.SelectMany(p => abrechnung.Benutzer.Select(b => new Verbrauch() { Benutzer = b, Verkaufsprodukt = p, AnzahlFlaschen = 0 })).ToList());
+                Verkaufsproduktsteuerung.NeueVerkaufsprodukte(abrechnung, verkaufsprodukte);
 
-                foreach (var produkt in produkte)
-                {
-                    produkt.Abrechnungen.Add(abrechnung);
-                    Produktsteuerung.BearbeiteProdukt(produkt);
-                }
-                Bestandsteuerung.NeueBestände(abrechnung, produkte.Select(p => new Bestand() { Produkt = p }).ToList());
-
-                Verbrauchsteuerung.NeueVerbrauche(abrechnung, produkte.SelectMany(p => abrechnung.Benutzer.Select(b => new Verbrauch() { Benutzer = b, Produkt = p, AnzahlFlaschen = 0 })).ToList());
                 BearbeiteAbrechnung(abrechnung);
 
                 transaktion?.Commit();
             }
         }
 
-        public bool KannEntferntWerden(Abrechnung abrechnung, Produkt produkt) => !abrechnung.Einkäufe.SelectMany(e => e.Positionen).Select(p => p.Produkt).Contains(produkt);
+        public bool KannEntferntWerden(Abrechnung abrechnung, Produkt produkt)
+        {
+            return !BenötigteProdukte(abrechnung).Contains(produkt);
+        }
 
         public void Entferne(Abrechnung abrechnung, Produkt produkt)
         {
             if (!KannEntferntWerden(abrechnung, produkt))
-                throw new InvalidOperationException("Dieses Produkt kann nicht entfernt werden, es ist noch Teil eines Einkaufs.");
+                return;
 
-            abrechnung.Produkte.Remove(produkt);
-            produkt.Abrechnungen.Remove(abrechnung);
-            Verbrauchsteuerung.LöscheVerbrauche(abrechnung.Verbrauche.Where(v => v.Produkt == produkt).ToList());
-            Bestandsteuerung.LöscheBestand(abrechnung.Bestände.Single(b => b.Produkt == produkt));
+            Verbrauchsteuerung.LöscheVerbrauche(abrechnung.Verbrauche.Where(v => v.Verkaufsprodukt.Produkt == produkt).ToList());
+            Verkaufsproduktsteuerung.LöscheVerkaufsprodukt(abrechnung.Verkaufsprodukte.Single(b => b.Produkt == produkt));
             BearbeiteAbrechnung(abrechnung);
-            Produktsteuerung.BearbeiteProdukt(produkt);
         }
 
         public void Entferne(Abrechnung abrechnung, ICollection<Produkt> produkte)
         {
-            var benötigt = abrechnung.Einkäufe.SelectMany(e => e.Positionen).Select(p => p.Produkt).ToHashSet();
-            if (benötigt.Intersect(produkte).Count() != 0)
-                throw new InvalidOperationException("Diese Produkte können nicht entfernt werden, sie sind noch Teil eines Einkaufs.");
+            produkte = produkte.Except(BenötigteProdukte(abrechnung)).ToList();
+            if (produkte.Count == 0)
+                return;
 
             using (var transaktion = Kontext.Database.BeginOrReuseTransaction())
             {
-                foreach (var produkt in produkte)
-                {
-                    abrechnung.Produkte.Remove(produkt);
-                    produkt.Abrechnungen.Remove(abrechnung);
-                    Produktsteuerung.BearbeiteProdukt(produkt);
-                }
                 var hashProdukte = produkte.ToHashSet(); // höhöhöhöhöhö
-                Verbrauchsteuerung.LöscheVerbrauche(abrechnung.Verbrauche.Where(v => hashProdukte.Contains(v.Produkt)).ToList());
-                Bestandsteuerung.LöscheBestände(abrechnung.Bestände.Where(b => hashProdukte.Contains(b.Produkt)).ToList());
-                BearbeiteAbrechnung(abrechnung); // Events nachher triggern?
+                Verbrauchsteuerung.LöscheVerbrauche(abrechnung.Verbrauche.Where(v => hashProdukte.Contains(v.Verkaufsprodukt.Produkt)).ToList());
+                Verkaufsproduktsteuerung.LöscheVerkaufsprodukte(abrechnung.Verkaufsprodukte.Where(b => hashProdukte.Contains(b.Produkt)).ToList());
+                BearbeiteAbrechnung(abrechnung);
 
                 transaktion?.Commit();
             }

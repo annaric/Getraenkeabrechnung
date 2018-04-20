@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Getränkeabrechnung.Modell
+namespace Getränkeabrechnung
 {
     public static class Erweiterungen
     {
@@ -20,6 +20,18 @@ namespace Getränkeabrechnung.Modell
                 return null;
             else
                 return database.BeginTransaction();
+        }
+
+        public static IEnumerable<TSource> DistinctBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+        {
+            HashSet<TKey> knownKeys = new HashSet<TKey>();
+            foreach (TSource element in source)
+            {
+                if (knownKeys.Add(keySelector(element)))
+                {
+                    yield return element;
+                }
+            }
         }
     }
 }

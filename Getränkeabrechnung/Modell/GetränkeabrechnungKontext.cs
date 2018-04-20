@@ -20,13 +20,14 @@ namespace Getränkeabrechnung.Modell
 
         public DbSet<Abrechnung> Abrechnungen { get; set; }
         public DbSet<Benutzer> Benutzer { get; set; }
-        public DbSet<Bestand> Bestände { get; set; }
         public DbSet<Einkauf> Einkäufe { get; set; }
         public DbSet<Einkaufsposition> Einkaufspositionen { get; set; }
+        public DbSet<Kastengröße> Kastengrößen { get; set; }
         public DbSet<Konto> Konten { get; set; }
         public DbSet<Produkt> Produkte { get; set; }
         public DbSet<Überweisung> Überweisungen { get; set; }
         public DbSet<Verbrauch> Verbrauche { get; set; }
+        public DbSet<Verkaufsprodukt> Verkaufsprodukte { get; set; }
         public DbSet<Zahlung> Zahlungen { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -38,15 +39,6 @@ namespace Getränkeabrechnung.Modell
                 Database.SetInitializer(initializer);
             }
 
-            modelBuilder.Entity<Abrechnung>()
-                .HasMany(s => s.Produkte)
-                .WithMany(p => p.Abrechnungen)
-                .Map(m =>
-                {
-                    m.MapLeftKey("Abrechnung_Id");
-                    m.MapRightKey("Produkt_Id");
-                    m.ToTable("AbrechnungProdukt");
-                });
             modelBuilder.Entity<Abrechnung>()
                 .HasMany(s => s.Benutzer)
                 .WithMany()

@@ -26,6 +26,7 @@ namespace Getränkeabrechnung.Ansicht
         private Produktfenster _produktfenster;
         private Einkäufefenster _einkäufefenster;
         private Abrechnungsfenster _abrechnungsfenster;
+        private AbrechnungsVorschauFenster _abrechnungsVorschauFenster;
 
         Benutzerfenster Benutzerfenster
         {
@@ -84,6 +85,16 @@ namespace Getränkeabrechnung.Ansicht
                 if (_abrechnungsfenster == null || _abrechnungsfenster.IsDisposed)
                     _abrechnungsfenster = new Abrechnungsfenster(this);
                 return _abrechnungsfenster;
+            }
+        }
+
+        public AbrechnungsVorschauFenster AbrechnungsVorschauFenster
+        {
+            get
+            {
+                if (_abrechnungsVorschauFenster == null || _abrechnungsVorschauFenster.IsDisposed)
+                    _abrechnungsVorschauFenster = new AbrechnungsVorschauFenster(this);
+                return _abrechnungsVorschauFenster;
             }
         }
 
@@ -268,7 +279,9 @@ namespace Getränkeabrechnung.Ansicht
                 Abrechnungsfenster.Focus();
             } else
             {
-                // TODO
+                AbrechnungsVorschauFenster.Abrechnung = abrechnung;
+                AbrechnungsVorschauFenster.Show();
+                AbrechnungsVorschauFenster.Focus();
             }
         }
 

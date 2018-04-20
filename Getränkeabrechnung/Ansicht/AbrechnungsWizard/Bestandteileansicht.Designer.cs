@@ -25,6 +25,7 @@
             this.BetragSpalte = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.Produktliste = new BrightIdeasSoftware.ObjectListView();
             this.NameSpalteProdukt = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.VerkaufspreisSpalte = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Benutzerliste)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Einkaufliste)).BeginInit();
@@ -149,11 +150,14 @@
             // Produktliste
             // 
             this.Produktliste.AllColumns.Add(this.NameSpalteProdukt);
+            this.Produktliste.AllColumns.Add(this.VerkaufspreisSpalte);
             this.Produktliste.AlternateRowBackColor = System.Drawing.SystemColors.ButtonFace;
+            this.Produktliste.CellEditActivation = BrightIdeasSoftware.ObjectListView.CellEditActivateMode.DoubleClick;
             this.Produktliste.CellEditUseWholeCell = false;
             this.Produktliste.CheckBoxes = true;
             this.Produktliste.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.NameSpalteProdukt});
+            this.NameSpalteProdukt,
+            this.VerkaufspreisSpalte});
             this.Produktliste.Cursor = System.Windows.Forms.Cursors.Default;
             this.Produktliste.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Produktliste.FullRowSelect = true;
@@ -171,6 +175,8 @@
             this.Produktliste.UseCompatibleStateImageBehavior = false;
             this.Produktliste.UseFiltering = true;
             this.Produktliste.View = System.Windows.Forms.View.Details;
+            this.Produktliste.CellEditFinished += new BrightIdeasSoftware.CellEditEventHandler(this.Produktliste_CellEditFinished);
+            this.Produktliste.CellEditStarting += new BrightIdeasSoftware.CellEditEventHandler(this.Produktliste_CellEditStarting);
             this.Produktliste.HeaderCheckBoxChanging += new System.EventHandler<BrightIdeasSoftware.HeaderCheckBoxChangingEventArgs>(this.Produktliste_HeaderCheckBoxChanging);
             // 
             // NameSpalteProdukt
@@ -180,7 +186,14 @@
             this.NameSpalteProdukt.FillsFreeSpace = true;
             this.NameSpalteProdukt.HeaderCheckBox = true;
             this.NameSpalteProdukt.HeaderCheckBoxUpdatesRowCheckBoxes = false;
+            this.NameSpalteProdukt.IsEditable = false;
             this.NameSpalteProdukt.Text = "Produkt";
+            // 
+            // VerkaufspreisSpalte
+            // 
+            this.VerkaufspreisSpalte.AspectName = "Preis";
+            this.VerkaufspreisSpalte.AspectToStringFormat = "{0:C}";
+            this.VerkaufspreisSpalte.Text = "Preis";
             // 
             // Bestandteileansicht
             // 
@@ -208,5 +221,6 @@
         private BrightIdeasSoftware.OLVColumn BetragSpalte;
         private BrightIdeasSoftware.ObjectListView Produktliste;
         private BrightIdeasSoftware.OLVColumn NameSpalteProdukt;
+        private BrightIdeasSoftware.OLVColumn VerkaufspreisSpalte;
     }
 }

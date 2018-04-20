@@ -14,53 +14,53 @@ namespace Getränkeabrechnung.Ansicht
 {
     public partial class ProduktBox : ComboBox
     {
-        private Produktsteuerung produktsteuerung;
+        private Kastengrößensteuerung kastengrößensteuerung;
 
         [Browsable(false)]
-        public Produktsteuerung Produktsteuerung
+        public Kastengrößensteuerung Kastengrößensteuerung
         {
             get
             {
-                return produktsteuerung;
+                return kastengrößensteuerung;
             }
 
             set
             {
-                if (produktsteuerung != null)
+                if (kastengrößensteuerung != null)
                 {
                     Items.Clear();
-                    produktsteuerung.ProduktHinzugefügt -= ProduktHinzugefügt;
-                    produktsteuerung.ProduktVerändert -= ProduktVerändert;
+                    kastengrößensteuerung.KastengrößeHinzugefügt -= KastengrößeHinzugefügt;
+                    kastengrößensteuerung.KastengrößeBearbeitet -= KastengrößeVerändert;
                 }
-                produktsteuerung = value;
-                if (produktsteuerung != null)
+                kastengrößensteuerung = value;
+                if (kastengrößensteuerung != null)
                 {
-                    produktsteuerung.ProduktHinzugefügt += ProduktHinzugefügt;
-                    produktsteuerung.ProduktVerändert += ProduktVerändert;
+                    kastengrößensteuerung.KastengrößeHinzugefügt += KastengrößeHinzugefügt;
+                    kastengrößensteuerung.KastengrößeBearbeitet += KastengrößeVerändert;
                     Fülle();
                 }
             }
         }
 
         [Browsable(false)]
-        public Produkt Produkt
+        public Kastengröße Kastengröße
         {
             get
             {
-                return (Produkt)SelectedItem;
+                return (Kastengröße)SelectedItem;
             }
             set
             {
-                SelectedItem = Produkt;
+                SelectedItem = Kastengröße;
             }
         }
 
-        public delegate bool ProduktFilter(Produkt k);
+        public delegate bool KastengrößeFilter(Kastengröße k);
 
         [NonSerialized]
-        private ProduktFilter filter;
+        private KastengrößeFilter filter;
         [Browsable(false)]
-        public ProduktFilter Filter
+        public KastengrößeFilter Filter
         {
             get
             {
@@ -69,22 +69,22 @@ namespace Getränkeabrechnung.Ansicht
             set
             {
                 filter = value;
-                if (produktsteuerung != null)
+                if (kastengrößensteuerung != null)
                     Fülle();
             }
         }
 
         private void Fülle()
         {
-            if (produktsteuerung != null)
+            if (kastengrößensteuerung != null)
             {
                 Items.Clear();
-                var prod = produktsteuerung.Produkte;
+                var größen = kastengrößensteuerung.Kastengrößen;
                 if (filter == null)
-                    prod = prod.Where(p => !p.Versteckt);
+                    größen = größen.Where(p => !p.Versteckt && !p.Produkt.Versteckt);
                 else
-                    prod = prod.Where(p => filter(p));
-                Items.AddRange(prod.OrderBy(p => p.Name).Cast<object>().ToArray());
+                    größen = größen.Where(p => filter(p));
+                Items.AddRange(größen.OrderBy(p => p.Produkt.Name).ThenBy(p => p.Größe).Cast<object>().ToArray());
                 if (Items.Count > 0)
                     SelectedIndex = 0;
             }
@@ -93,15 +93,15 @@ namespace Getränkeabrechnung.Ansicht
         public ProduktBox()
         {
             InitializeComponent();
-            DisplayMember = "Name";
+            DisplayMember = "Anzeigename";
         }
 
-        private void ProduktHinzugefügt(Produkt konto)
+        private void KastengrößeHinzugefügt(Kastengröße größe)
         {
             Fülle();
         }
 
-        private void ProduktVerändert(Produkt konto)
+        private void KastengrößeVerändert(Kastengröße größe)
         {
             Fülle();
         }

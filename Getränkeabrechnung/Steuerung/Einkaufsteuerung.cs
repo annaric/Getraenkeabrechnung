@@ -52,7 +52,7 @@ namespace Getränkeabrechnung.Steuerung
                 if (einkauf.Abrechnung != null)
                     Abrechnungssteuerung.Entferne(einkauf.Abrechnung, einkauf);
 
-                Einkaufspositionssteuerung.LöschePositionen(einkauf.Positionen, erzwinge: true);
+                Einkaufspositionssteuerung.LöschePositionen(einkauf.Positionen.ToList(), erzwinge: true);
 
                 var überweisung = einkauf.Überweisung;
                 Überweisungssteuerung.StorniereÜberweisung(überweisung, erzwinge: true);

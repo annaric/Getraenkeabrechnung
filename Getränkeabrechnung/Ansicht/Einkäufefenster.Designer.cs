@@ -197,7 +197,7 @@
             // 
             // ProduktSpalte
             // 
-            this.ProduktSpalte.AspectName = "Produkt";
+            this.ProduktSpalte.AspectName = "Kastengröße";
             this.ProduktSpalte.CellEditUseWholeCell = true;
             this.ProduktSpalte.FillsFreeSpace = true;
             this.ProduktSpalte.Text = "Produkt";
@@ -344,13 +344,13 @@
             // ProduktBox
             // 
             this.ProduktBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.ProduktBox.DisplayMember = "Name";
+            this.ProduktBox.DisplayMember = "Anzeigename";
             this.ProduktBox.Filter = null;
             this.ProduktBox.FormattingEnabled = true;
+            this.ProduktBox.Kastengröße = null;
+            this.ProduktBox.Kastengrößensteuerung = null;
             this.ProduktBox.Location = new System.Drawing.Point(3, 3);
             this.ProduktBox.Name = "ProduktBox";
-            this.ProduktBox.Produkt = null;
-            this.ProduktBox.Produktsteuerung = null;
             this.ProduktBox.Size = new System.Drawing.Size(100, 21);
             this.ProduktBox.TabIndex = 2;
             // 

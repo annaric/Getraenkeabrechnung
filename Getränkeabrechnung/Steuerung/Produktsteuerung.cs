@@ -19,45 +19,18 @@ namespace Getränkeabrechnung.Steuerung
 
         public IEnumerable<Produkt> Produkte => Kontext.Produkte.AsEnumerable();
 
-        public bool KannBearbeitetWerden(Produkt produkt)
-        {
-            return !BenutzteProdukte.Any(p => p.Id == produkt.Id);
-        }
+        public bool KannGelöschtWerden(Produkt produkt) => !BenutzteProdukte.Any(p => p.Id == produkt.Id);
 
-        public IEnumerable<Produkt> BenutzteProdukte
-        {
-            get
-            {
-                return Kontext.Einkaufspositionen
-                    .Where(p => p.Einkauf.Abrechnung == null || !p.Einkauf.Abrechnung.Gebucht)
-                    .Select(p => p.Produkt).Distinct();
-            }
-        }
-
-        private bool KannMitKlonenBearbeitetWerden(Produkt produkt) => !produkt.Abrechnungen.Any(a => a.Gebucht);
-
-        public Produkt BearbeitbaresProdukt(Produkt produkt)
-        {
-            // Wenn das Produkt nicht Teil einer schon gebuchten Abrechnung ist, kann es bearbeitet werden.
-            if (KannMitKlonenBearbeitetWerden(produkt))
-                return produkt;
-            else
-                return produkt.Klone();
-        }
+        public IEnumerable<Produkt> BenutzteProdukte => Kontext.Einkäufe
+            .Where(e => e.Abrechnung == null || !e.Abrechnung.Gebucht)
+            .SelectMany(e => e.Positionen)
+            .Select(k => k.Kastengröße.Produkt)
+            .Distinct();
 
         public void BearbeiteProdukt(Produkt produkt)
         {
-            if (produkt.Elternprodukt != null && !produkt.Elternprodukt.Versteckt)
-            {
-                // Das Produkt wurde bearbeitet, es wird durch ein gleichartiges Produkt ersetzt, damit alte Abrechnungen valide bleiben.
-                produkt.Elternprodukt.Versteckt = true;
-                NeuesProdukt(produkt);
-                ProduktVerändert?.Invoke(produkt.Elternprodukt);
-            } else
-            {
-                Kontext.SaveChanges();
-                ProduktVerändert?.Invoke(produkt);
-            }
+            Kontext.SaveChanges();
+            ProduktVerändert?.Invoke(produkt);
         }
 
         public void NeuesProdukt(Produkt produkt)
@@ -65,6 +38,15 @@ namespace Getränkeabrechnung.Steuerung
             Kontext.Produkte.Add(produkt);
             Kontext.SaveChanges();
             ProduktHinzugefügt?.Invoke(produkt);
+        }
+
+        public void Lösche(Produkt produkt)
+        {
+            if (!KannGelöschtWerden(produkt))
+                throw new InvalidOperationException("Dieses Produkt kann nicht gelöscht werden, es ist Teil einer noch nicht abgerechneten Abrechnung");
+
+            produkt.Versteckt = true;
+            BearbeiteProdukt(produkt);
         }
     }
 }

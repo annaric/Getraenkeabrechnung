@@ -71,6 +71,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ansicht\AbrechnungsVorschauFenster.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ansicht\AbrechnungsVorschauFenster.Designer.cs">
+      <DependentUpon>AbrechnungsVorschauFenster.cs</DependentUpon>
+    </Compile>
     <Compile Include="Ansicht\AbrechnungsWizard\Abrechnungsfenster.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -149,6 +155,9 @@
     <Compile Include="Ansicht\Kontofenster.Designer.cs">
       <DependentUpon>Kontofenster.cs</DependentUpon>
     </Compile>
+    <Compile Include="Ansicht\ListViewPrinter.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Ansicht\ProduktBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -167,14 +176,15 @@
     <Compile Include="Ansicht\Util.cs" />
     <Compile Include="Modell\Abrechnung.cs" />
     <Compile Include="Modell\Benutzer.cs" />
-    <Compile Include="Modell\Bestand.cs" />
     <Compile Include="Modell\Einkauf.cs" />
     <Compile Include="Modell\Einkaufsposition.cs" />
-    <Compile Include="Modell\Erweiterungen.cs" />
+    <Compile Include="Erweiterungen.cs" />
     <Compile Include="Modell\GetränkeabrechnungKontext.cs" />
+    <Compile Include="Modell\Kastengröße.cs" />
     <Compile Include="Modell\Konto.cs" />
     <Compile Include="Modell\Produkt.cs" />
     <Compile Include="Modell\Verbrauch.cs" />
+    <Compile Include="Modell\Verkaufsprodukt.cs" />
     <Compile Include="Modell\Zahlung.cs" />
     <Compile Include="Modell\Überweisung.cs" />
     <Compile Include="Program.cs" />
@@ -191,14 +201,15 @@
     </Compile>
     <Compile Include="Steuerung\Abrechnungssteuerung.cs" />
     <Compile Include="Steuerung\Benutzersteuerung.cs" />
-    <Compile Include="Steuerung\Bestandsteuerung.cs" />
     <Compile Include="Steuerung\Datenbanksteuerung.cs" />
     <Compile Include="Steuerung\Einkaufspositionssteuerung.cs" />
     <Compile Include="Steuerung\Einkaufsteuerung.cs" />
+    <Compile Include="Steuerung\Kastengrößensteuerung.cs" />
     <Compile Include="Steuerung\Kontosteuerung.cs" />
     <Compile Include="Steuerung\Produktsteuerung.cs" />
     <Compile Include="Steuerung\Steuerung.cs" />
     <Compile Include="Steuerung\Verbrauchsteuerung.cs" />
+    <Compile Include="Steuerung\Verkaufsproduktsteuerung.cs" />
     <Compile Include="Steuerung\Zahlungssteuerung.cs" />
     <Compile Include="Steuerung\Überweisungssteuerung.cs" />
   </ItemGroup>
@@ -213,6 +224,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Ansicht\AbrechnungsVorschauFenster.resx">
+      <DependentUpon>AbrechnungsVorschauFenster.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ansicht\AbrechnungsWizard\Abrechnungsfenster.resx">
       <DependentUpon>Abrechnungsfenster.cs</DependentUpon>
     </EmbeddedResource>

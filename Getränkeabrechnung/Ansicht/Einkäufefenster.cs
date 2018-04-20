@@ -35,10 +35,10 @@ namespace Getränkeabrechnung.Ansicht
             EinkaufLöschenSpalte.AspectToStringConverter = (a => (a == null || !((Abrechnung)a).Gebucht) ? "Löschen" : null);
             PositionLöschenSpalte.AspectToStringConverter = (e => "Löschen");
             KontoSpalte.AspectToStringConverter = (ü => ((Überweisung)ü).Konto.Name);
-            ProduktSpalte.AspectToStringConverter = (p => ((Produkt)p).Name);
+            ProduktSpalte.AspectToStringConverter = (p => ((Kastengröße)p).Anzeigename);
 
             KontoBox.Kontosteuerung = hauptfenster.Steuerung.Kontosteuerung;
-            ProduktBox.Produktsteuerung = hauptfenster.Steuerung.Produktsteuerung;
+            ProduktBox.Kastengrößensteuerung = hauptfenster.Steuerung.Kastengrößensteuerung;
         }
 
         private void Einkäufefenster_Load(object sender, EventArgs e)
@@ -182,7 +182,7 @@ namespace Getränkeabrechnung.Ansicht
 
             var position = new Einkaufsposition
             {
-                Produkt = ProduktBox.Produkt,
+                Kastengröße = ProduktBox.Kastengröße,
                 AnzahlKästen = anzahl
             };
 
@@ -193,9 +193,9 @@ namespace Getränkeabrechnung.Ansicht
         {
             if (e.Value is Produkt)
             {
-                var produktBox = new ProduktBox() { Produktsteuerung = Hauptfenster.Steuerung.Produktsteuerung };
+                var produktBox = new ProduktBox() { Kastengrößensteuerung = Hauptfenster.Steuerung.Kastengrößensteuerung };
                 produktBox.Bounds = e.CellBounds;
-                produktBox.Produkt = (Produkt)e.Value;
+                produktBox.Kastengröße = (Kastengröße)e.Value;
                 e.Control = produktBox;
             }
         }

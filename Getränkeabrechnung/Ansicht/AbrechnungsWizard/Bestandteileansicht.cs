@@ -19,8 +19,28 @@ namespace Getränkeabrechnung.Ansicht.AbrechnungsWizard
         private Einkaufsteuerung einkaufsteuerung;
         private Produktsteuerung produktsteuerung;
         private Einkaufspositionssteuerung positionssteuerung;
+        private Verkaufsproduktsteuerung verkaufsproduktsteuerung;
 
-        private List<Produkt> ErzwungeneProdukte;
+        private List<Produkt> erzwungeneProdukte;
+        private Dictionary<Produkt, ProduktProxy> proxies;
+
+        private class ProduktProxy
+        {
+            public Verkaufsprodukt Verkaufsprodukt { get; set; }
+            public Produkt Produkt { get; set; }
+            
+            public string Name => Produkt.Name;
+            public double? Preis {
+                get => Verkaufsprodukt?.Verkaufspreis;
+                set
+                {
+                    if (Verkaufsprodukt != null || value.HasValue)
+                        Verkaufsprodukt.Verkaufspreis = value.Value;
+                }
+            }
+            
+            public bool Enthalten => Verkaufsprodukt != null;
+        }
 
         public Bestandteileansicht()
         {
@@ -34,11 +54,12 @@ namespace Getränkeabrechnung.Ansicht.AbrechnungsWizard
             Einkaufliste.BooleanCheckStatePutter = ((o, b) => SetzeEinkauf((Einkauf)o, b));
             Einkaufliste.ModelFilter = new ModelFilter(e => ((Einkauf)e).Abrechnung == null || ((Einkauf)e).Abrechnung == Abrechnung);
 
-            Produktliste.BooleanCheckStateGetter = (p => Abrechnung.Produkte.Contains((Produkt)p));
-            Produktliste.BooleanCheckStatePutter = ((o, b) => SetzeProdukt((Produkt)o, b));
-            Produktliste.ModelFilter = new ModelFilter(p => !((Produkt)p).Versteckt);
+            Produktliste.BooleanCheckStateGetter = (p => ((ProduktProxy)p).Enthalten);
+            Produktliste.BooleanCheckStatePutter = ((o, b) => SetzeProdukt(((ProduktProxy)o).Produkt, b));
+            Produktliste.ModelFilter = new ModelFilter(p => !((ProduktProxy)p).Produkt.Versteckt);
 
-            ErzwungeneProdukte = new List<Produkt>();
+            erzwungeneProdukte = new List<Produkt>();
+            proxies = new Dictionary<Produkt, ProduktProxy>();
         }
 
         public Bestandteileansicht(Hauptfenster hauptfenster) : this()
@@ -49,6 +70,7 @@ namespace Getränkeabrechnung.Ansicht.AbrechnungsWizard
             einkaufsteuerung = hauptfenster.Steuerung.Einkaufsteuerung;
             produktsteuerung = hauptfenster.Steuerung.Produktsteuerung;
             positionssteuerung = hauptfenster.Steuerung.Einkaufspositionssteuerung;
+            verkaufsproduktsteuerung = hauptfenster.Steuerung.Verkaufsproduktsteuerung;
 
 
             // Listeners
@@ -65,6 +87,30 @@ namespace Getränkeabrechnung.Ansicht.AbrechnungsWizard
             positionssteuerung.EinkaufspositionHinzugefügt += Positionssteuerung_EinkaufspositionHinzugefügt;
             positionssteuerung.EinkaufspositionVerändert += Positionssteuerung_EinkaufspositionVerändert;
             positionssteuerung.EinkaufspositionGelöscht += Positionssteuerung_EinkaufspositionGelöscht;
+
+            verkaufsproduktsteuerung.VerkaufsproduktHinzugefügt += Verkaufsproduktsteuerung_VerkaufsproduktHinzugefügt;
+            verkaufsproduktsteuerung.VerkaufsproduktVerändert += Verkaufsproduktsteuerung_VerkaufsproduktVerändert;
+            verkaufsproduktsteuerung.VerkaufsproduktGelöscht += Verkaufsproduktsteuerung_VerkaufsproduktGelöscht;
+        }
+
+        private void Verkaufsproduktsteuerung_VerkaufsproduktVerändert(Verkaufsprodukt p)
+        {
+            var proxy = proxies[p.Produkt];
+            Produktliste.UpdateObject(proxy);
+        }
+
+        private void Verkaufsproduktsteuerung_VerkaufsproduktGelöscht(Verkaufsprodukt p)
+        {
+            var proxy = proxies[p.Produkt];
+            proxy.Verkaufsprodukt = null;
+            Produktliste.UpdateObject(proxy);
+        }
+
+        private void Verkaufsproduktsteuerung_VerkaufsproduktHinzugefügt(Verkaufsprodukt p)
+        {
+            var proxy = proxies[p.Produkt];
+            proxy.Verkaufsprodukt = p;
+            Produktliste.UpdateObject(proxy);
         }
 
         private void Positionssteuerung_EinkaufspositionGelöscht(Einkaufsposition einkaufsposition)
@@ -87,12 +133,13 @@ namespace Getränkeabrechnung.Ansicht.AbrechnungsWizard
 
         private void Produktsteuerung_ProduktVerändert(Produkt produkt)
         {
-            Produktliste.UpdateObject(produkt);
+            Produktliste.UpdateObject(proxies[produkt]);
         }
 
         private void Produktsteuerung_ProduktHinzugefügt(Produkt produkt)
         {
-            Produktliste.AddObject(produkt);
+            var proxy = new ProduktProxy { Produkt = produkt }; // Neues Produkt kann noch nicht Teil einer Abrechnung sein
+            Produktliste.AddObject(proxy);
         }
 
         private void Einkaufsteuerung_EinkaufGelöscht(Einkauf einkauf)
@@ -146,6 +193,10 @@ namespace Getränkeabrechnung.Ansicht.AbrechnungsWizard
                 positionssteuerung.EinkaufspositionHinzugefügt -= Positionssteuerung_EinkaufspositionHinzugefügt;
                 positionssteuerung.EinkaufspositionVerändert -= Positionssteuerung_EinkaufspositionVerändert;
                 positionssteuerung.EinkaufspositionGelöscht -= Positionssteuerung_EinkaufspositionGelöscht;
+
+                verkaufsproduktsteuerung.VerkaufsproduktHinzugefügt -= Verkaufsproduktsteuerung_VerkaufsproduktHinzugefügt;
+                verkaufsproduktsteuerung.VerkaufsproduktVerändert -= Verkaufsproduktsteuerung_VerkaufsproduktVerändert;
+                verkaufsproduktsteuerung.VerkaufsproduktGelöscht -= Verkaufsproduktsteuerung_VerkaufsproduktGelöscht;
             }
             base.Dispose(disposing);
         }
@@ -158,7 +209,12 @@ namespace Getränkeabrechnung.Ansicht.AbrechnungsWizard
             Einkaufliste.SetObjects(einkaufsteuerung.Einkäufe.ToList());
             Einkaufliste.Sort(DatumSpalte, SortOrder.Descending);
 
-            Produktliste.SetObjects(produktsteuerung.Produkte.ToList());
+            proxies = produktsteuerung.Produkte
+                .Select(p => new ProduktProxy
+                {
+                    Produkt = p, Verkaufsprodukt = Abrechnung.Verkaufsprodukte.SingleOrDefault(vk => vk.Produkt == p)
+                }).ToDictionary(p => p.Produkt);
+            Produktliste.SetObjects(proxies.Values.ToList());
             Produktliste.Sort(NameSpalteProdukt);
 
             AktualisiereErzwungeneProdukte();
@@ -187,10 +243,10 @@ namespace Getränkeabrechnung.Ansicht.AbrechnungsWizard
 
         private void AktualisiereErzwungeneProdukte()
         {
-            var erzwungeneProdukteBackup = ErzwungeneProdukte.ToList();
-            ErzwungeneProdukte = Abrechnung.Einkäufe.SelectMany(e => e.Positionen).Select(p => p.Produkt).ToList();
-            Produktliste.DisabledObjects = ErzwungeneProdukte.ToList();
-            Produktliste.UpdateObjects(erzwungeneProdukteBackup);
+            var erzwungeneProdukteBackup = erzwungeneProdukte.ToList();
+            erzwungeneProdukte = abrechnungssteuerung.BenötigteProdukte(Abrechnung).ToList();
+            Produktliste.DisabledObjects = erzwungeneProdukte.Select(p => proxies[p]).ToList();
+            Produktliste.UpdateObjects(erzwungeneProdukteBackup.Select(p => proxies[p]).ToList());
         }
 
         private bool SetzeProdukt(Produkt produkt, bool enthalten)
@@ -219,7 +275,7 @@ namespace Getränkeabrechnung.Ansicht.AbrechnungsWizard
                 abrechnungssteuerung.FügeHinzu(Abrechnung, einkaufsteuerung.Einkäufe.Where(ein => ein.Abrechnung == null).ToList());
             else
                 abrechnungssteuerung.Entferne(Abrechnung, Abrechnung.Einkäufe.ToList()); // Besser vorher kopieren, sonst modifizieren wir die Liste während iteration
-            Einkaufliste.BuildList();
+            // Einkaufliste.BuildList();
         }
 
         private void Produktliste_HeaderCheckBoxChanging(object sender, HeaderCheckBoxChangingEventArgs e)
@@ -227,8 +283,23 @@ namespace Getränkeabrechnung.Ansicht.AbrechnungsWizard
             if (e.NewCheckState == CheckState.Checked)
                 abrechnungssteuerung.FügeHinzu(Abrechnung, produktsteuerung.Produkte.Where(p => !p.Versteckt).Except(Abrechnung.Produkte).ToList());
             else
-                abrechnungssteuerung.Entferne(Abrechnung, produktsteuerung.Produkte.Where(p => !p.Versteckt).Except(ErzwungeneProdukte).ToList());
+                abrechnungssteuerung.Entferne(Abrechnung, produktsteuerung.Produkte.Where(p => !p.Versteckt).Except(erzwungeneProdukte).ToList());
             Produktliste.BuildList();
+        }
+
+        private void Produktliste_CellEditFinished(object sender, CellEditEventArgs e)
+        {
+            if (e.Cancel)
+                return;
+            var proxy = (ProduktProxy)e.RowObject;
+            verkaufsproduktsteuerung.BearbeiteVerkaufsprodukt(proxy.Verkaufsprodukt);
+        }
+
+        private void Produktliste_CellEditStarting(object sender, CellEditEventArgs e)
+        {
+            var proxy = (ProduktProxy)e.RowObject;
+            if (!proxy.Enthalten)
+                e.Cancel = true;
         }
     }
 }

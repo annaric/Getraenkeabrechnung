@@ -15,7 +15,7 @@ namespace Getränkeabrechnung.Ansicht.AbrechnungsWizard
     public partial class Verbrauchansicht : AbrechnungsWizardAnsicht
     {
         private Verbrauchsteuerung verbrauchsteuerung;
-        private Bestandsteuerung bestandsteuerung;
+        private Verkaufsproduktsteuerung bestandsteuerung;
         private Abrechnungssteuerung abrechnungssteuerung;
 
         private Dictionary<Benutzer, VerbrauchProxy> verbrauchProxies;
@@ -23,7 +23,7 @@ namespace Getränkeabrechnung.Ansicht.AbrechnungsWizard
 
         private abstract class Proxy
         {
-            public abstract Benutzer Benutzer { get; }
+            public abstract string Titel { get; }
             public abstract int Get(Produkt produkt);
             public abstract void Set(Produkt produkt, int wert);
         }
@@ -36,10 +36,10 @@ namespace Getränkeabrechnung.Ansicht.AbrechnungsWizard
             public VerbrauchProxy(Abrechnung abrechnung, Benutzer benutzer)
             {
                 this.benutzer = benutzer;
-                verbrauche = abrechnung.Produkte.ToDictionary(p => p, p => abrechnung.Verbrauche.Single(v => v.Produkt == p && v.Benutzer == benutzer));
+                verbrauche = abrechnung.Verkaufsprodukte.ToDictionary(p => p.Produkt, p => abrechnung.Verbrauche.Single(v => v.Verkaufsprodukt == p && v.Benutzer == benutzer));
             }
 
-            public override Benutzer Benutzer => benutzer;
+            public override string Titel => benutzer.Anzeigename;
 
             public override int Get(Produkt produkt)
             {
@@ -56,35 +56,31 @@ namespace Getränkeabrechnung.Ansicht.AbrechnungsWizard
 
         private class BestandProxy : Proxy
         {
-            private Dictionary<Produkt, Bestand> bestände;
-            private Benutzer dummy;
+            private Dictionary<Produkt, Verkaufsprodukt> bestände;
 
             public BestandProxy(Abrechnung abrechnung)
             {
-                dummy = new Benutzer() { Vorname = "Bestand", Zimmernummer = 999, Kaution = 1.0, Id = int.MaxValue };
-                bestände = abrechnung.Produkte.ToDictionary(p => p, p => abrechnung.Bestände.Single(b => b.Produkt == p));
+                bestände = abrechnung.Verkaufsprodukte.ToDictionary(vk => vk.Produkt);
             }
 
-            public override Benutzer Benutzer => dummy;
+            public override string Titel => "Bestand";
 
             public override int Get(Produkt produkt)
             {
-                return bestände[produkt].AnzahlFlaschen;
+                return bestände[produkt].Bestand;
             }
 
             public override void Set(Produkt produkt, int wert)
             {
-                bestände[produkt].AnzahlFlaschen = wert;
+                bestände[produkt].Bestand = wert;
             }
 
-            public Bestand GetBestand(Produkt produkt) => bestände[produkt];
+            public Verkaufsprodukt GetBestand(Produkt produkt) => bestände[produkt];
         }
 
         public Verbrauchansicht()
         {
             InitializeComponent();
-
-            NameSpalte.AspectGetter = (o => ((Proxy)o).Benutzer.Anzeigename);
 
             verbrauchProxies = new Dictionary<Benutzer, VerbrauchProxy>();
         }
@@ -93,7 +89,7 @@ namespace Getränkeabrechnung.Ansicht.AbrechnungsWizard
         {
             Hauptfenster = hauptfenster;
             verbrauchsteuerung = hauptfenster.Steuerung.Verbrauchsteuerung;
-            bestandsteuerung = hauptfenster.Steuerung.Bestandsteuerung;
+            bestandsteuerung = hauptfenster.Steuerung.Verkaufsproduktsteuerung;
             abrechnungssteuerung = hauptfenster.Steuerung.Abrechnungssteuerung;
 
             abrechnungssteuerung.AbrechnungVerändert += Abrechnungssteuerung_AbrechnungVerändert;
@@ -133,9 +129,9 @@ namespace Getränkeabrechnung.Ansicht.AbrechnungsWizard
             Verbrauchliste.AllColumns.Add(NameSpalte);
             if (Abrechnung != null)
             {
-                for (int i = 0; i < Abrechnung.Produkte.Count; i++)
+                for (int i = 0; i < Abrechnung.Verkaufsprodukte.Count; i++)
                 {
-                    var produkt = Abrechnung.Produkte[i];
+                    var produkt = Abrechnung.Verkaufsprodukte[i].Produkt;
                     Verbrauchliste.AllColumns.Add(new OLVColumn
                     {
                         DisplayIndex = i + 1,
@@ -154,7 +150,8 @@ namespace Getränkeabrechnung.Ansicht.AbrechnungsWizard
                     verbrauchProxies[benutzer] = new VerbrauchProxy(Abrechnung, benutzer);
                 }
                 bestandProxy = new BestandProxy(Abrechnung);
-                Verbrauchliste.SetObjects(verbrauchProxies.Values.OrderBy(p => p.Benutzer.Zimmernummer).ToList());
+                Verbrauchliste.SetObjects(new List<Proxy>());
+                Verbrauchliste.AddObjects(Abrechnung.Benutzer.OrderBy(b => b.Zimmernummer).Select(b => verbrauchProxies[b]).ToList());
                 Verbrauchliste.AddObject(bestandProxy);
             }
             Verbrauchliste.RebuildColumns();
@@ -164,11 +161,11 @@ namespace Getränkeabrechnung.Ansicht.AbrechnungsWizard
 
         private void Verbrauchliste_CellEditFinished(object sender, CellEditEventArgs e)
         {
-            var produkt = Abrechnung.Produkte[e.Column.Index];
+            var produkt = Abrechnung.Verkaufsprodukte[e.Column.Index].Produkt;
             if (e.RowObject is VerbrauchProxy)
                 verbrauchsteuerung.BearbeiteVerbrauch(((VerbrauchProxy)e.RowObject).GetVerbrauch(produkt));
             else
-                bestandsteuerung.BearbeiteBestand(((BestandProxy)e.RowObject).GetBestand(produkt));
+                bestandsteuerung.BearbeiteVerkaufsprodukt(((BestandProxy)e.RowObject).GetBestand(produkt));
         }
 
         private void Verbrauchliste_CellEditStarting(object sender, CellEditEventArgs e)

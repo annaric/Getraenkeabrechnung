@@ -83,7 +83,7 @@ namespace Getränkeabrechnung.Ansicht.AbrechnungsWizard
         private void FülleKnöpfe()
         {
             ZurückKnopf.Text = abrechnung.Schritt == 1 ? "Löschen" : "Zurück";
-            WeiterKnopf.Text = abrechnung.Schritt == 5 ? "Buchen" : "Weiter";
+            WeiterKnopf.Text = abrechnung.Schritt == 3 ? "Vorschau" : "Weiter";
         }
 
         private void ZurückKnopf_Click(object sender, EventArgs e)
@@ -102,16 +102,12 @@ namespace Getränkeabrechnung.Ansicht.AbrechnungsWizard
 
         private void WeiterKnopf_Click(object sender, EventArgs e)
         {
-            if (abrechnung.Schritt == 5)
+            if (abrechnung.Schritt == 3)
             {
-                DialogResult dialogResult = MessageBox.Show("Bist du sicher, dass du diese Abrechnung Buchen möchtest?\n" + 
-                                                            "Diese Operation kann nicht rückgängig gemacht werden.", "Buchen", MessageBoxButtons.YesNo);
-                if (dialogResult == DialogResult.No)
-                    return;
-
-                abrechnungssteuerung.BucheAbrechnung(abrechnung);
-                // Öffne+fokussiere Ergebnisfenster
+                Hauptfenster.AbrechnungsVorschauFenster.Abrechnung = abrechnung;
+                Hauptfenster.AbrechnungsVorschauFenster.Show();
                 Close();
+                Hauptfenster.AbrechnungsVorschauFenster.Focus();
             } else
             {
                 abrechnung.Schritt += 1;

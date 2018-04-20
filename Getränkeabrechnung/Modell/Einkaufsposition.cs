@@ -15,7 +15,7 @@ namespace Getränkeabrechnung.Modell
         [Required]
         public virtual Einkauf Einkauf { get; set; }
         [Required]
-        public virtual Produkt Produkt { get; set; }
+        public virtual Kastengröße Kastengröße { get; set; }
         public int AnzahlKästen { get; set; }
     }
 }
