@@ -17,11 +17,12 @@ namespace Getränkeabrechnung.Ansicht
     {
         private Zahlungssteuerung zahlungssteuerung;
         private Abrechnungssteuerung abrechnungssteuerung;
+        private Benutzersteuerung benutzersteuerung;
 
         private Dictionary<Benutzer, BenutzerProxy> benutzerProxies;
         private AltBestandProxy altBestandProxy;
         private BestandProxy bestandProxy;
-        private VerbrauchProxy verbrauchProxy;
+        private VerkaufProxy verbrauchProxy;
         private EinkaufProxy einkaufProxy;
         private VerlustProxy verlustProxy;
         private VerlustWertProxy verlustWertProxy;
@@ -45,14 +46,15 @@ namespace Getränkeabrechnung.Ansicht
             private Abrechnung abrechnung;
             private Dictionary<Produkt, Verbrauch> verbrauche;
             private Benutzer benutzer;
+            private Zahlung zahlung;
             private double verbrauchKosten;
             private double verlustKosten;
 
             public override string Name => benutzer.Anzeigename;
             public override string VerbrauchKosten => verbrauchKosten.ToString("C");
             public override string VerlustKosten => verlustKosten.ToString("C");
-            public double NeuesGuthabenDouble => abrechnung.Gebucht ? benutzer.Guthaben : benutzer.Guthaben - verbrauchKosten - verlustKosten;
-            public double AltesGuthabenDouble => abrechnung.Gebucht ? benutzer.Guthaben + verbrauchKosten + verlustKosten : benutzer.Guthaben;
+            public double NeuesGuthabenDouble => abrechnung.Gebucht ? zahlung.NeuesGuthaben : benutzer.Guthaben - verbrauchKosten - verlustKosten;
+            public double AltesGuthabenDouble => abrechnung.Gebucht ? zahlung.AltesGuthaben : benutzer.Guthaben;
             public override string NeuesGuthaben => NeuesGuthabenDouble.ToString("C");
             public override string AltesGuthaben => AltesGuthabenDouble.ToString("C");
 
@@ -62,6 +64,7 @@ namespace Getränkeabrechnung.Ansicht
                 this.benutzer = benutzer;
                 verbrauche = abrechnung.Verkaufsprodukte.ToDictionary(p => p.Produkt, p => abrechnung.Verbrauche.Single(v => v.Verkaufsprodukt == p && v.Benutzer == benutzer));
                 verbrauchKosten = verbrauche.Values.Select(v => v.AnzahlFlaschen * v.Verkaufsprodukt.Verkaufspreis).Sum();
+                zahlung = abrechnung.Gebucht ? abrechnung.Zahlungen.Single(z => z.Benutzer == benutzer) : null;
                 verlustKosten = verluste;
             }
 
@@ -104,20 +107,24 @@ namespace Getränkeabrechnung.Ansicht
             }
         }
         
-        private class AltBestandProxy : BestandProxy {
+        private class AltBestandProxy : FettProxy
+        {
+            protected Dictionary<Produkt, int> bestände;
 
             public override string Name => "Bestand vorher";
 
-            public AltBestandProxy(Abrechnung abrechnung) : base(abrechnung)
+            public AltBestandProxy(Abrechnung abrechnung)
             {
-                if (abrechnung.AusgangsBestandAbrechnung != null)
-                    abrechnung.AusgangsBestandAbrechnung.Verkaufsprodukte.Where(p => bestände.ContainsKey(p.Produkt)).ToList().ForEach(p => bestände[p.Produkt] += p.Bestand);
-                else
-                    abrechnung.Verkaufsprodukte.ForEach(p => bestände[p.Produkt] = 0);
+                bestände = abrechnung.BerechneAltbestände();
+            }
+
+            public override string Get(Produkt produkt)
+            {
+                return bestände[produkt].ToString("d");
             }
         }
 
-        private class VerbrauchProxy : FettProxy
+        private class VerkaufProxy : FettProxy
         {
             private Abrechnung abrechnung;
             public Dictionary<Produkt, int> verkäufe;
@@ -128,10 +135,10 @@ namespace Getränkeabrechnung.Ansicht
             public override string VerbrauchKosten => verbrauchPreisTotal.ToString("C");
             public override string NeuesGuthaben => gesamtSchulden.ToString("C");
 
-            public VerbrauchProxy(Abrechnung abrechnung, ICollection<BenutzerProxy> proxies)
+            public VerkaufProxy(Abrechnung abrechnung, ICollection<BenutzerProxy> proxies)
             {
                 this.abrechnung = abrechnung;
-                verkäufe = abrechnung.Verbrauche.GroupBy(v => v.Verkaufsprodukt.Produkt).ToDictionary(g => g.Key, g => g.Select(v => v.AnzahlFlaschen).Sum());
+                verkäufe = abrechnung.BerechneVerbrauche();
                 verbrauchPreisTotal = abrechnung.Verbrauche.Select(v => v.Verkaufsprodukt.Verkaufspreis * v.AnzahlFlaschen).Sum();
                 gesamtSchulden = proxies.Select(p => p.NeuesGuthabenDouble).Sum();
             }
@@ -157,9 +164,7 @@ namespace Getränkeabrechnung.Ansicht
 
             public EinkaufProxy(Abrechnung abrechnung)
             {
-                einkäufe = abrechnung.Verkaufsprodukte.ToDictionary(p => p.Produkt, p => 0);
-                foreach (var position in abrechnung.Einkäufe.SelectMany(e => e.Positionen))
-                    einkäufe[position.Kastengröße.Produkt] += position.Kastengröße.Größe * position.AnzahlKästen;
+                einkäufe = abrechnung.BerechneEinkäufe();
             }
 
             public override string Get(Produkt produkt)
@@ -176,7 +181,7 @@ namespace Getränkeabrechnung.Ansicht
 
             public VerlustProxy(Abrechnung abrechnung)
             {
-                verluste = abrechnung.BerecheVerluste();
+                verluste = abrechnung.BerechneVerluste();
             }
 
             public override string Get(Produkt produkt)
@@ -220,7 +225,7 @@ namespace Getränkeabrechnung.Ansicht
 
             public override string Name => "Verlustzuschlag";
 
-            public VerlustUmlageProxy(Abrechnung abrechnung, VerbrauchProxy verbrauch, VerlustWertProxy wert)
+            public VerlustUmlageProxy(Abrechnung abrechnung, VerkaufProxy verbrauch, VerlustWertProxy wert)
             {
                 verlustUmlagen = verbrauch.verkäufe.Keys.ToDictionary(p => p, p => verbrauch.verkäufe[p] != 0 ? wert.verlustwerte[p] / verbrauch.verkäufe[p] : 0.0);
             }
@@ -247,7 +252,6 @@ namespace Getränkeabrechnung.Ansicht
             InitializeComponent();
 
             benutzerProxies = new Dictionary<Benutzer, BenutzerProxy>();
-            PrintDokument.DefaultPageSettings.Landscape = true;
         }
 
         public AbrechnungsVorschauFenster(Hauptfenster hauptfenster) : this()
@@ -256,6 +260,15 @@ namespace Getränkeabrechnung.Ansicht
 
             zahlungssteuerung = hauptfenster.Steuerung.Zahlungssteuerung;
             abrechnungssteuerung = hauptfenster.Steuerung.Abrechnungssteuerung;
+            benutzersteuerung = hauptfenster.Steuerung.Benutzersteuerung;
+        }
+
+        private void AktualisiereBenutzer(Benutzer benutzer)
+        {
+            if (!benutzerProxies.ContainsKey(benutzer))
+                return;
+
+            Tabelle.UpdateObject(benutzerProxies[benutzer]);
         }
 
         public override void Fülle()
@@ -265,14 +278,12 @@ namespace Getränkeabrechnung.Ansicht
                 if (Abrechnung.Gebucht)
                 {
                     Text = Abrechnung.Name;
-                    Knopf.Text = "Drucken...";
+                    Knopf.Text = "Exportieren...";
                 } else
                 {
                     Text = Abrechnung.Name + " - Vorschau";
                     Knopf.Text = "Buchen...";
                 }
-
-                PrintDokument.DocumentName = Abrechnung.Name;
             }
 
             Knopf.Enabled = Abrechnung != null;
@@ -290,7 +301,7 @@ namespace Getränkeabrechnung.Ansicht
                 for (int i = 0; i < Abrechnung.Verkaufsprodukte.Count; i++)
                 {
                     var produkt = Abrechnung.Verkaufsprodukte[i].Produkt;
-                    Tabelle.AllColumns.Add(new BrightIdeasSoftware.OLVColumn
+                    Tabelle.AllColumns.Add(new OLVColumn
                     {
                         DisplayIndex = i + 1,
                         IsHeaderVertical = true,
@@ -328,7 +339,7 @@ namespace Getränkeabrechnung.Ansicht
                 einkaufProxy = new EinkaufProxy(Abrechnung);
                 Tabelle.AddObject(einkaufProxy);
                 Tabelle.AddObjects(Abrechnung.Benutzer.OrderBy(b => b.Zimmernummer).Select(b => benutzerProxies[b]).ToList());
-                verbrauchProxy = new VerbrauchProxy(Abrechnung, benutzerProxies.Values);
+                verbrauchProxy = new VerkaufProxy(Abrechnung, benutzerProxies.Values);
                 Tabelle.AddObject(verbrauchProxy);
                 bestandProxy = new BestandProxy(Abrechnung);
                 Tabelle.AddObject(bestandProxy);
@@ -360,7 +371,7 @@ namespace Getränkeabrechnung.Ansicht
 
             if (Abrechnung.Gebucht)
             {
-                PrintDialog.ShowDialog();
+                speichernDialog.ShowDialog();
             } else
             {
                 DialogResult dialogResult = MessageBox.Show(this, "Bist du sicher, dass du die Abrechnung buchen willst? Diese Aktion kann nicht rückgängig gemacht werden.", "Abrechnung buchen", MessageBoxButtons.YesNo);
@@ -377,10 +388,10 @@ namespace Getränkeabrechnung.Ansicht
 
         private void PrintDokument_PrintPage(object sender, PrintPageEventArgs e)
         {
-            ZeicheListeAufGraphics(e.Graphics, e.MarginBounds);
+            ZeichneListeAufGraphics(e.Graphics, e.MarginBounds);
         }
 
-        private void ZeicheListeAufGraphics(Graphics graphics, Rectangle bounds)
+        private void ZeichneListeAufGraphics(Graphics graphics, Rectangle bounds)
         {
             Bitmap bitmap = new Bitmap(Tabelle.Width, Tabelle.Height);
             Tabelle.DrawToBitmap(bitmap, new Rectangle(0, 0, bitmap.Width, bitmap.Height));
@@ -393,6 +404,24 @@ namespace Getränkeabrechnung.Ansicht
                 target.Height = (int)(yScale * target.Height / xScale);
             graphics.PageUnit = GraphicsUnit.Display;
             graphics.DrawImage(bitmap, target);
+        }
+
+        private void AbrechnungsVorschauFenster_Load(object sender, EventArgs e)
+        {
+            benutzersteuerung.BenutzerVerändert += AktualisiereBenutzer;
+        }
+
+        private void AbrechnungsVorschauFenster_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            benutzersteuerung.BenutzerVerändert -= AktualisiereBenutzer;
+        }
+
+        private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
+        {
+            using (var file = new System.IO.StreamWriter(speichernDialog.OpenFile()))
+            {
+                file.WriteLine(Abrechnung.NachHtml());
+            }
         }
     }
 }

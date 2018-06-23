@@ -49,6 +49,9 @@ namespace Getränkeabrechnung.Modell
             var paare = Verbrauche.Select(v => new { v.Benutzer, v.Verkaufsprodukt}).ToHashSet();
             if (!Benutzer.SelectMany(b => Verkaufsprodukte.Select(p => new { Benutzer = b, Verkaufsprodukt = p })).All(p => paare.Contains(p)))
                 throw new InvalidOperationException("Diese Abrechnung hat keinen Verbrauch für jeden Benutzer und jedes Produkt");
+
+            if (!Zahlungen.Select(z => z.Benutzer).ToHashSet().SetEquals(Benutzer))
+                throw new InvalidOperationException("Diese Abrechnung enthält nicht eine Zahlung für jeden Benutzer");
         }
 
         public List<Zahlung> Buche()
@@ -63,7 +66,9 @@ namespace Getränkeabrechnung.Modell
             var getränkekosten = BerechneKostenProBenutzer();
 
             Zahlungen.Clear();
-            Zahlungen.AddRange(Benutzer.Where(b => -verlustumlage[b] - getränkekosten[b] > 0).Select(benutzer => new Zahlung()
+            // Wir fügen selbst dann eine Zahlung hinzu wenn der Benutzer in dieser Abrechnung nichts bezahlen muss
+            // Das erlaubt den Schluss abrechnung.Gebucht => es gibt eine Zahlung für jeden Benutzer in abrechnung.Benutzer
+            Zahlungen.AddRange(Benutzer.Select(benutzer => new Zahlung()
             {
                 Benutzer = benutzer, // Untypisch, erleichtert aber die Zuweisung
                 Betrag = -verlustumlage[benutzer] - getränkekosten[benutzer],
@@ -87,7 +92,30 @@ namespace Getränkeabrechnung.Modell
             return getränkekosten;
         }
 
-        public Dictionary<Produkt, int> BerecheVerluste()
+        public Dictionary<Produkt, int> BerechneAltbestände()
+        {
+            if (AusgangsBestandAbrechnung == null)
+                return Verkaufsprodukte.ToDictionary(vk => vk.Produkt, vk => 0);
+            else {
+                var ausgang = AusgangsBestandAbrechnung.Verkaufsprodukte.ToDictionary(vk => vk.Produkt, vk => vk.Bestand);
+                return Produkte.ToDictionary(p => p, p => ausgang.ContainsKey(p) ? ausgang[p] : 0);
+            }
+        }
+
+        public Dictionary<Produkt, int> BerechneVerbrauche()
+        {
+            return Verbrauche.GroupBy(v => v.Verkaufsprodukt.Produkt).ToDictionary(g => g.Key, g => g.Select(v => v.AnzahlFlaschen).Sum());
+        }
+
+        public Dictionary<Produkt, int> BerechneEinkäufe()
+        {
+            var einkäufe = Verkaufsprodukte.ToDictionary(p => p.Produkt, p => 0);
+            foreach (var position in Einkäufe.SelectMany(e => e.Positionen))
+                einkäufe[position.Kastengröße.Produkt] += position.Kastengröße.Größe * position.AnzahlKästen;
+            return einkäufe;
+        }
+
+        public Dictionary<Produkt, int> BerechneVerluste()
         {
             var beständeSoll = Verkaufsprodukte.ToDictionary(p => p.Produkt, p => 0);
 
@@ -107,9 +135,9 @@ namespace Getränkeabrechnung.Modell
 
         public Dictionary<Benutzer, double> BerechneVerlustumlage()
         {
-            var verluste = BerecheVerluste();
+            var verluste = BerechneVerluste();
 
-            var verbrauchProProdukt = Verkaufsprodukte.ToDictionary(p => p.Produkt, p => Verbrauche.Where(v => v.Verkaufsprodukt == p).Select(v => v.AnzahlFlaschen).Sum());
+            var verbrauchProProdukt = BerechneVerbrauche();
 
             var verbrauche = Verbrauche.ToDictionary(v => new { v.Benutzer, v.Verkaufsprodukt }, v => v.AnzahlFlaschen);
 

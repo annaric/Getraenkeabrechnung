@@ -286,6 +286,9 @@ namespace Getränkeabrechnung
                     Löschbar = kv.Value.deletable,
                     Überweisung = kv.Value.transaction_id != null ? überweisungen[kv.Value.transaction_id] : null
                 })).ToDictionary();
+            foreach (Zahlung zahlung in zahlungen.Values)
+                if (zahlung.Abrechnung != null)
+                    zahlung.Abrechnung.Zahlungen.Add(zahlung);
 
             var productChildren = products.Values.Where(p => p.ancestor != null).ToDictionary(p => p.ancestor, p => p.id); // Es gibt keine Produkte mit mehreren Kindern
             string LetztesProdukt (string id)
@@ -381,6 +384,24 @@ namespace Getränkeabrechnung
             {
                 if (abrechnung.Name.StartsWith("Initial Stock"))
                     continue;
+                var benutzerSet = abrechnung.Zahlungen.Select(z => z.Benutzer).ToHashSet();
+                var neueZahlungen = abrechnung.Benutzer.Where(b => !benutzerSet.Contains(b)).Select(b => new { Benutzer = b, Guthaben =
+                    b.Zahlungen.Where(z => z.Buchungszeitpunkt > abrechnung.Endzeitpunkt).MinBy(z => z.Buchungszeitpunkt)?.AltesGuthaben ?? b.Guthaben }
+                    ).Select(p =>
+                    new Zahlung
+                    {
+                        Benutzer = p.Benutzer,
+                        Betrag = 0.0,
+                        Buchungszeitpunkt = abrechnung.Endzeitpunkt,
+                        Beschreibung = "Abrechnung: " + abrechnung.Name,
+                        AltesGuthaben = p.Guthaben,
+                        NeuesGuthaben = p.Guthaben,
+                        Abrechnung = abrechnung,
+                        Löschbar = false
+                    }
+                );
+                abrechnung.Zahlungen.AddRange(neueZahlungen);
+
                 abrechnung.Verifiziere();
             }
 

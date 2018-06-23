@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AbrechnungsVorschauFenster));
             this.Tabelle = new BrightIdeasSoftware.ObjectListView();
             this.NameSpalte = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.VerbrauchKostenSpalte = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -37,8 +36,7 @@
             this.NeuGuthabenSpalte = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.Knopf = new System.Windows.Forms.Button();
-            this.PrintDokument = new System.Drawing.Printing.PrintDocument();
-            this.PrintDialog = new System.Windows.Forms.PrintPreviewDialog();
+            this.speichernDialog = new System.Windows.Forms.SaveFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.Tabelle)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -137,31 +135,24 @@
             // 
             // Knopf
             // 
-            this.Knopf.Dock = System.Windows.Forms.DockStyle.Right;
-            this.Knopf.Location = new System.Drawing.Point(1086, 504);
+            this.Knopf.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.Knopf.AutoSize = true;
+            this.Knopf.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.Knopf.Location = new System.Drawing.Point(1085, 504);
+            this.Knopf.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
             this.Knopf.Name = "Knopf";
-            this.Knopf.Size = new System.Drawing.Size(75, 34);
+            this.Knopf.Size = new System.Drawing.Size(79, 37);
             this.Knopf.TabIndex = 1;
-            this.Knopf.Text = "Drucken...";
+            this.Knopf.Text = "Exportieren...";
             this.Knopf.UseVisualStyleBackColor = true;
             this.Knopf.Click += new System.EventHandler(this.Knopf_Click);
             // 
-            // PrintDokument
+            // speichernDialog
             // 
-            this.PrintDokument.OriginAtMargins = true;
-            this.PrintDokument.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.PrintDokument_PrintPage);
-            // 
-            // PrintDialog
-            // 
-            this.PrintDialog.AutoScrollMargin = new System.Drawing.Size(0, 0);
-            this.PrintDialog.AutoScrollMinSize = new System.Drawing.Size(0, 0);
-            this.PrintDialog.ClientSize = new System.Drawing.Size(400, 300);
-            this.PrintDialog.Document = this.PrintDokument;
-            this.PrintDialog.Enabled = true;
-            this.PrintDialog.Icon = ((System.Drawing.Icon)(resources.GetObject("PrintDialog.Icon")));
-            this.PrintDialog.Name = "PrintDialog";
-            this.PrintDialog.UseAntiAlias = true;
-            this.PrintDialog.Visible = false;
+            this.speichernDialog.DefaultExt = "html";
+            this.speichernDialog.Filter = "html Dateien|*.html";
+            this.speichernDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.saveFileDialog1_FileOk);
             // 
             // AbrechnungsVorschauFenster
             // 
@@ -171,8 +162,11 @@
             this.Name = "AbrechnungsVorschauFenster";
             this.Padding = new System.Windows.Forms.Padding(10);
             this.Text = "Abrechnung";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AbrechnungsVorschauFenster_FormClosing);
+            this.Load += new System.EventHandler(this.AbrechnungsVorschauFenster_Load);
             ((System.ComponentModel.ISupportInitialize)(this.Tabelle)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -187,7 +181,6 @@
         private BrightIdeasSoftware.OLVColumn NeuGuthabenSpalte;
         private BrightIdeasSoftware.OLVColumn VerbrauchKostenSpalte;
         private BrightIdeasSoftware.OLVColumn VerlustKostenSpalte;
-        private System.Drawing.Printing.PrintDocument PrintDokument;
-        private System.Windows.Forms.PrintPreviewDialog PrintDialog;
+        private System.Windows.Forms.SaveFileDialog speichernDialog;
     }
 }

@@ -143,6 +143,7 @@
     <Compile Include="Ansicht\Hauptfenster.Designer.cs">
       <DependentUpon>Hauptfenster.cs</DependentUpon>
     </Compile>
+    <Compile Include="Ansicht\HtmlExporter.cs" />
     <Compile Include="Ansicht\KontoBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -154,9 +155,6 @@
     </Compile>
     <Compile Include="Ansicht\Kontofenster.Designer.cs">
       <DependentUpon>Kontofenster.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Ansicht\ListViewPrinter.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Ansicht\ProduktBox.cs">
       <SubType>Component</SubType>
